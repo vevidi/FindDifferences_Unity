@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Vevidi.FindDiff.Model
+namespace Vevidi.FindDiff.NetworkModel
 {
     [Serializable]
     public class DifferenceInfoModel

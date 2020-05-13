@@ -144,12 +144,14 @@ namespace UnityAsyncAwaitUtil
             await new WaitForSeconds(1.0f);
         }
 
+#pragma warning disable 0618
         async Task RunWwwAsync()
         {
             Debug.Log("Downloading asset bundle using WWW");
             var bytes = (await new WWW(AssetBundleSampleUrl)).bytes;
             Debug.Log("Downloaded " + (bytes.Length / 1024) + " kb");
         }
+#pragma warning disable 0618
 
         async Task RunOpenNotepadTestAsync()
         {

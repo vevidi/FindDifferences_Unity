@@ -64,10 +64,12 @@ public static class IEnumeratorAwaitExtensions
     }
 
     // Return itself so you can do things like (await new WWW(url)).bytes
+#pragma warning disable 0618
     public static SimpleCoroutineAwaiter<WWW> GetAwaiter(this WWW instruction)
     {
         return GetAwaiterReturnSelf(instruction);
     }
+#pragma warning restore 0618
 
     public static SimpleCoroutineAwaiter<AssetBundle> GetAwaiter(this AssetBundleCreateRequest instruction)
     {

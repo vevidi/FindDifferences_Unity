@@ -1,4 +1,4 @@
-﻿namespace Vevidi.FindDiff.Model
+﻿namespace Vevidi.FindDiff.NetworkModel
 {
     public interface IJsonEncodable
     {

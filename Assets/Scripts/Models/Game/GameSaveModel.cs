@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vevidi.FindDiff.NetworkModel;
 
-namespace Vevidi.FindDiff.Model
+namespace Vevidi.FindDiff.GameModel
 {
     [Serializable]
-    public class LevelsModel : IJsonEncodable
+    public class GameSaveModel : IJsonEncodable
     {
-        public List<LevelInfoModel> levels;
+        [SerializeField]
+        private List<LevelDescriptionModel> levels;
 
         public void Decode(string json)
         {
