@@ -8,10 +8,34 @@ using System.Text;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Vevidi.FindDiff.Utils
+namespace Vevidi.FindDiff.GameUtils
 {
     public static class Utils
     {
+        public struct SpritePivot
+        {
+            public static Vector2 BottomLeft = Vector2.zero;
+            public static Vector2 TopRight = Vector2.one;
+            public static Vector2 Center = Vector2.one * 0.5f;
+            public static Vector2 TopLeft = new Vector2(0, 1);
+            public static Vector2 BottomRight = new Vector2(1, 0);
+            public static Vector2 CenterLeft = new Vector2(0, 0.5f);
+            public static Vector2 CenterRight = new Vector2(1, 0.5f);
+            public static Vector2 CenterTop = new Vector2(0.5f,1);
+            public static Vector2 CenterBottom = new Vector2(0.5f, 0);
+        }
+
+        public static Sprite GetSpriteFromTex2D(Texture2D texture)
+        {
+            return GetSpriteFromTex2D(texture, SpritePivot.Center);
+        }
+
+        public static Sprite GetSpriteFromTex2D(Texture2D texture, Vector2 pivot)
+        {
+            Rect newRect = new Rect(0, 0, texture.width, texture.height);
+            return Sprite.Create(texture, newRect, pivot);
+        }
+
         public static string GetTimeAsStringFormatted(float time)
         {
             TimeSpan ts = TimeSpan.FromSeconds(time);

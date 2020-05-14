@@ -6,7 +6,7 @@ using UnityEngine;
 using Vevidi.FindDiff.NetworkModel;
 using Vevidi.FindDiff.Network;
 using RequestType = Vevidi.FindDiff.Network.NetworkManager.RequestType;
-using Vevidi.FindDiff.Utils;
+using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.GameLogic;
 
 namespace Vevidi.FindDiff.Network

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace Vevidi.FindDiff.Utils
+namespace Vevidi.FindDiff.GameUtils
 {
     public static class SaveLoadUtility
     {

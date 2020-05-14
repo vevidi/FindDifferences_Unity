@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Vevidi.FindDiff.NetworkModel;
-using Vevidi.FindDiff.Utils;
+using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.FindDiff.GameModel
 {
@@ -44,6 +44,11 @@ namespace Vevidi.FindDiff.GameModel
         public void LoadImage()
         {
             levelImage = SaveLoadUtility.LoadImage(levelInfo.Id + ".jpg");
+        }
+
+        public override string ToString()
+        {
+            return "Is opened: " + isOpened + " is ended: " + isEnded + " level info:\n" + levelInfo;
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameModel;
+using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.FindDiff.UI
 {
@@ -30,14 +31,16 @@ namespace Vevidi.FindDiff.UI
         public void Init(LevelDescriptionModel model)
         {
             levelDescription = model;
-            Rect buttonRect = buttonImage.rectTransform.rect;
+            //Rect buttonRect = buttonImage.rectTransform.rect;
             Texture2D buttonImageTexture = new Texture2D(model.LevelImage.width, model.LevelImage.height);
 
             buttonImageTexture.SetPixels(model.LevelImage.GetPixels());
             buttonImageTexture.Apply();
 
             Rect newRect = new Rect(0, 0, buttonImageTexture.width, buttonImageTexture.height);
-            buttonImage.overrideSprite = Sprite.Create(buttonImageTexture, newRect, Vector2.one * 0.5f);
+            buttonImage.overrideSprite = Utils.GetSpriteFromTex2D(buttonImageTexture);
+
+                //Sprite.Create(buttonImageTexture, newRect, Vector2.one * 0.5f);
 
             levelButton.onClick.AddListener(OnClick);
 
@@ -57,6 +60,7 @@ namespace Vevidi.FindDiff.UI
 
         private void OnClick()
         {
+            Debug.Log("Selecting level: " + levelDescription.Id);
             GameManager.Instance.LevelsManager.SelectLevel(levelDescription.Id);
             SceneManager.LoadScene(GameVariables.LevelScene);
         }
