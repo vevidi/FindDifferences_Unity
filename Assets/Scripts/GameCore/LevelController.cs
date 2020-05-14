@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vevidi.FindDiff.Factories;
+using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.GameModel;
 using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.UI;
@@ -26,6 +27,7 @@ namespace Vevidi.FindDiff.GameLogic
         private LevelObjectsFactory loFactory;
         private Mediator gameEvents;
         private List<TouchableArea> touchableAreas;
+        private Button backgroundClickArea;
 
         private int gameFieldWidth;
         private int gameFieldHeight;
@@ -55,22 +57,30 @@ namespace Vevidi.FindDiff.GameLogic
             gameFieldWidth = (int)gameFieldRoot.rect.width;
             gameFieldHeight = (int)gameFieldRoot.rect.height;
 
+            backgroundClickArea = backgroundImage.GetComponent<Button>();
+            backgroundClickArea.onClick.AddListener(OnMissTap);
             Debug.Log("Level controller -> Loaded level: " + levelInfo);
+        }
+
+        private void OnMissTap()
+        {
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Wrong);
         }
 
         private void OnDiffFound(DiffFoundCommand command)
         {
-            Debug.Log("Trace 1");
-            Debug.Log("-> " + touchableAreas.Count);
+            RectTransform checkmark = loFactory.CreateCheckmark(gameFieldRoot);
+            checkmark.localPosition = command.sender.transform.localPosition;
+
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Correct);
+
             touchableAreas.ForEach((ta) =>
             {
                 if (ta.GetId() == command.foundedDifference.Id)
                     Destroy(ta.gameObject);
             });
-            Debug.Log("->> " + touchableAreas.Count);
             touchableAreas.RemoveAll((ta) => { return ta.GetId() == command.foundedDifference.Id; });
-            Debug.Log("->>> " + touchableAreas.Count);
+
             int newDiffValue = levelInfo.LevelInfo.Differences.Count - touchableAreas.Count / 2;
             gameEvents.Publish(new UpdateLevelUiCommand(newDiffValue));
             if (touchableAreas.Count == 0)
@@ -108,6 +118,7 @@ namespace Vevidi.FindDiff.GameLogic
         protected override void OnDestroy()
         {
             //base.OnDestroy();
+            backgroundClickArea.onClick.RemoveListener(OnMissTap);
             gameEvents.DeleteSubscriber<DiffFoundCommand>(OnDiffFound);
         }
     }

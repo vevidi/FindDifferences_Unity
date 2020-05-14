@@ -8,6 +8,7 @@ using Vevidi.FindDiff.Network;
 using RequestType = Vevidi.FindDiff.Network.NetworkManager.RequestType;
 using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.GameLogic;
+using Vevidi.FindDiff.GameMediator;
 
 namespace Vevidi.FindDiff.Network
 {
@@ -15,11 +16,13 @@ namespace Vevidi.FindDiff.Network
     {
         private static void PrintError(string error)
         {
-            Debug.LogError("Network error: \n" + error);
+            //Debug.LogError("Network error: \n" + error);
+            GameManager.Instance.gameEventSystem.Publish(new LoadingStatusCommand(LoadingStatusCommand.eLoadingStatus.Error, error));
         }
 
         private static async Task<LevelsModel> LoadGameInfo()
         {
+            GameManager.Instance.gameEventSystem.Publish(new LoadingStatusCommand(LoadingStatusCommand.eLoadingStatus.Ok, "Loading game info"));
             LevelsModel result = await NetworkManager.Instance.RequestTaskJson<LevelsModel>(RequestType.Get, GameVariables.LoadUrl, null, PrintError);
             return result;
         }
@@ -28,7 +31,10 @@ namespace Vevidi.FindDiff.Network
         {
             foreach (LevelInfoModel model in levelsInfo.Levels)
             {
-                Texture2D tex = await NetworkManager.Instance.RequestTaskTex2D(GameVariables.ImageLoadUrl + model.Image, PrintError);
+                string loadUrl = GameVariables.ImageLoadUrl + model.Image;
+                var command = new LoadingStatusCommand(LoadingStatusCommand.eLoadingStatus.Ok, "LOADING: " + loadUrl);
+                GameManager.Instance.gameEventSystem.Publish(command);
+                Texture2D tex = await NetworkManager.Instance.RequestTaskTex2D(loadUrl, PrintError);
                 if (tex == null)
                     return (true, model.Image);
                 else

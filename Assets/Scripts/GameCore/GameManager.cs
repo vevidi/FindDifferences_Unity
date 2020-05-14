@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Vevidi.FindDiff.Factories;
+using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.GameModel;
 using Vevidi.FindDiff.NetworkModel;
 

@@ -49,13 +49,13 @@ namespace Vevidi.FindDiff.Network
             if (req.isHttpError)
             {
                 Debug.LogWarning("Http error: " + req.error + " " + req.url);
-                onError?.Invoke("Http error: " + req.error);
+                onError?.Invoke("Http error: " + req.error + " " + req.url);
                 return true;
             }
             if (req.isNetworkError)
             {
                 Debug.LogWarning("Network error: " + req.error + " " + req.url);
-                onError?.Invoke("Http error: " + req.error);
+                onError?.Invoke("Network error: " + req.error + " " + req.url);
                 return true;
             }
             return false;

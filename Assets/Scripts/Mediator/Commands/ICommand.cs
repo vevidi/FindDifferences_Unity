@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface ICommand
+﻿namespace Vevidi.FindDiff.GameMediator
 {
-    //void Exec();
+    public interface ICommand
+    {
+        //void Exec();
+    }
 }

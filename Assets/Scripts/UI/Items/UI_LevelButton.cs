@@ -24,8 +24,8 @@ namespace Vevidi.FindDiff.UI
 
         private void Awake()
         {
-            levelButton = GetComponent<Button>();
-            buttonImage = GetComponent<Image>();
+            levelButton = GetComponentInChildren<Button>();
+            buttonImage = levelButton.image;
         }
 
         public void Init(LevelDescriptionModel model)

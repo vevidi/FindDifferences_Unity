@@ -12,6 +12,8 @@ namespace Vevidi.FindDiff.Factories
 #pragma warning disable 0649
         [SerializeField]
         private TouchableArea touchableAreaPrefab;
+        [SerializeField]
+        private RectTransform checkMarkPrefab;
 #pragma warning restore 0649
 
         public TouchableArea CreateTouchableArea(RectTransform parent, DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
@@ -20,6 +22,14 @@ namespace Vevidi.FindDiff.Factories
             area.transform.SetParent(parent);
             area.Init(model, offsetX, offsetY);
             return area;
+        }
+
+        public RectTransform CreateCheckmark(RectTransform parent)
+        {
+            RectTransform checkmark = CreateItem(checkMarkPrefab);
+            checkmark.SetParent(parent);
+            checkmark.localScale = Vector3.one;
+            return checkmark;
         }
     }
 }

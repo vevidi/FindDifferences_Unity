@@ -12,18 +12,18 @@ namespace Vevidi.FindDiff.UI
         [SerializeField]
         private Button backToMenuButton;
 #pragma warning restore 0649
-        private Button popupBackround;
+        //private Button popupBackround;
 
         private void Awake()
         {
-            popupBackround = GetComponent<Button>();
-            popupBackround.onClick.AddListener(OnCloseButtonClick);
+            //popupBackround = GetComponent<Button>();
+            //popupBackround.onClick.AddListener(OnCloseButtonClick);
             backToMenuButton.onClick.AddListener(OnBackToMenuButtonClick);
         }
 
         private void OnDestroy()
         {
-            popupBackround.onClick.RemoveListener(OnCloseButtonClick);
+            //popupBackround.onClick.RemoveListener(OnCloseButtonClick);
             backToMenuButton.onClick.RemoveListener(OnBackToMenuButtonClick);
         }
 

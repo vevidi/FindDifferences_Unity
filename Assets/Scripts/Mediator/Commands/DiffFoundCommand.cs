@@ -1,12 +1,17 @@
-﻿
+﻿using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.NetworkModel;
 
-public class DiffFoundCommand : ICommand
+namespace Vevidi.FindDiff.GameMediator
 {
-    public DifferenceInfoModel foundedDifference;
-
-    public DiffFoundCommand(DifferenceInfoModel foundedDifference)
+    public class DiffFoundCommand : ICommand
     {
-        this.foundedDifference = foundedDifference;
+        public DifferenceInfoModel foundedDifference;
+        public TouchableArea sender;
+
+        public DiffFoundCommand(DifferenceInfoModel foundedDifference, TouchableArea sender)
+        {
+            this.foundedDifference = foundedDifference;
+            this.sender = sender;
+        }
     }
 }

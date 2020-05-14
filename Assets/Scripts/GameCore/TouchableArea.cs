@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
@@ -35,7 +36,7 @@ namespace Vevidi.FindDiff.GameLogic
         private void OnClick()
         {
             Debug.Log("On click");
-            GameManager.Instance.gameEventSystem.Publish(new DiffFoundCommand(model));
+            GameManager.Instance.gameEventSystem.Publish(new DiffFoundCommand(model,this));
             gameObject.SetActive(false);
         }
 

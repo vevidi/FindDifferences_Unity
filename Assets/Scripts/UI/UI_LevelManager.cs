@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameLogic;
+using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.UI
@@ -51,14 +52,5 @@ namespace Vevidi.FindDiff.UI
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Click);
             SceneManager.LoadScene(GameVariables.MainMenuScene);
         }
-
-        // ---------------- DEBUG -------------------
-        public void TestDiffFoundCmd()
-        {
-            var lController = FindObjectOfType<LevelController>();
-            DifferenceInfoModel diffModel = lController.GetLevelInfo().Differences[0];
-            gameEvents.Publish(new DiffFoundCommand(diffModel));
-        }
-        // ------------- END DEBUG ------------------
     }
 }

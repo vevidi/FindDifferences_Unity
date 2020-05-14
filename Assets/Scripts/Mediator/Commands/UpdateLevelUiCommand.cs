@@ -1,9 +1,12 @@
-﻿public class UpdateLevelUiCommand : ICommand
+﻿namespace Vevidi.FindDiff.GameMediator
 {
-    public int diffFoundValue;
-
-    public UpdateLevelUiCommand(int value)
+    public class UpdateLevelUiCommand : ICommand
     {
-        diffFoundValue = value;
+        public int diffFoundValue;
+
+        public UpdateLevelUiCommand(int value)
+        {
+            diffFoundValue = value;
+        }
     }
 }

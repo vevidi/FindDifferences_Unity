@@ -6,7 +6,7 @@ using static Vevidi.FindDiff.UI.UI_WindowsManager;
 
 namespace Vevidi.FindDiff.UI
 {
-    public class UI_WindowConfig : MonoBehaviour
+    public class UI_WindowConfig
     {
         private eWindowType wType;
         private Dictionary<string, object> wData;
