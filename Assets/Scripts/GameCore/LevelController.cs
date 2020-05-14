@@ -28,6 +28,7 @@ namespace Vevidi.FindDiff.GameLogic
         private Mediator gameEvents;
         private List<TouchableArea> touchableAreas;
         private Button backgroundClickArea;
+        private RectTransform gameFieldImageTransform;
 
         private int gameFieldWidth;
         private int gameFieldHeight;
@@ -45,6 +46,15 @@ namespace Vevidi.FindDiff.GameLogic
         //    }
         //}
 
+        private void UpdateSize()
+        {
+            if(Utils.GetAspectRatio()>1.8f)
+            {
+                gameFieldImageTransform.localScale = Vector3.one * 0.85f;
+                gameFieldRoot.localScale = Vector3.one * 0.85f;
+            }
+        }
+
         private void Awake()
         {
             lManager = GameManager.Instance.LevelsManager;
@@ -56,9 +66,12 @@ namespace Vevidi.FindDiff.GameLogic
 
             gameFieldWidth = (int)gameFieldRoot.rect.width;
             gameFieldHeight = (int)gameFieldRoot.rect.height;
+            gameFieldImageTransform = backgroundImage.rectTransform;
 
             backgroundClickArea = backgroundImage.GetComponent<Button>();
             backgroundClickArea.onClick.AddListener(OnMissTap);
+            UpdateSize();
+
             Debug.Log("Level controller -> Loaded level: " + levelInfo);
         }
 
@@ -97,9 +110,9 @@ namespace Vevidi.FindDiff.GameLogic
             var diffs = levelInfo.Differences;
             foreach (var diff in diffs)
             {
-                TouchableArea area = loFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, -gameFieldHeight / 2);
+                TouchableArea area = loFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, 0);
                 touchableAreas.Add(area);
-                area = loFactory.CreateTouchableArea(gameFieldRoot, diff, 0, -gameFieldHeight / 2);
+                area = loFactory.CreateTouchableArea(gameFieldRoot, diff);
                 touchableAreas.Add(area);
             }
             lvManager.Init(diffs.Count);

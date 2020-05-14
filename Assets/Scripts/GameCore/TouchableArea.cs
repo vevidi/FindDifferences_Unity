@@ -17,7 +17,7 @@ namespace Vevidi.FindDiff.GameLogic
         public void Init(DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
         {
             this.model = model;
-            radius = model.Radius;
+            radius = model.Radius * 0.8f; // IMPORTANT! multiplier added temporary for debug
             rectTransform.sizeDelta = Vector2.one * radius * 2;
             rectTransform.localPosition = new Vector2(model.X + offsetX, model.Y + offsetY);
             rectTransform.localScale = Vector3.one;
