@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameMediator;
-using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.UI
 {
@@ -42,7 +39,6 @@ namespace Vevidi.FindDiff.UI
 
         private void OnDifferenceFound(UpdateLevelUiCommand command)
         {
-            Debug.Log("Trace 2");
             Debug.Log(command.diffFoundValue);
             diffFoundText.text = string.Format("Differences found: {0}/{1}", command.diffFoundValue, diffCount);
         }

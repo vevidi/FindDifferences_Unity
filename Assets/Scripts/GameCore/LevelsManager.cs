@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Vevidi.FindDiff.GameModel;
 using Vevidi.FindDiff.NetworkModel;
@@ -16,7 +15,6 @@ namespace Vevidi.FindDiff.GameLogic
             allLevels = new List<LevelDescriptionModel>();
         }
 
-        // TODO: add save check to update opened and ended levels
         public void InitFromLevelsModel(LevelsModel model)
         {
             var levels = model.Levels;

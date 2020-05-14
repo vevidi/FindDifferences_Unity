@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vevidi.FindDiff.Factories;
@@ -32,19 +31,6 @@ namespace Vevidi.FindDiff.GameLogic
 
         private int gameFieldWidth;
         private int gameFieldHeight;
-
-        //public static LevelController Instance
-        //{
-        //    get
-        //    {
-        //        if (isShuttingDown)
-        //        {
-        //            Debug.LogWarning("Level controller is shutting down");
-        //            return null;
-        //        }
-        //        return instance;
-        //    }
-        //}
 
         private void UpdateSize()
         {
@@ -130,7 +116,6 @@ namespace Vevidi.FindDiff.GameLogic
 
         protected override void OnDestroy()
         {
-            //base.OnDestroy();
             backgroundClickArea.onClick.RemoveListener(OnMissTap);
             gameEvents.DeleteSubscriber<DiffFoundCommand>(OnDiffFound);
         }

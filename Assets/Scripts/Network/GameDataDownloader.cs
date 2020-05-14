@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Vevidi.FindDiff.NetworkModel;
-using Vevidi.FindDiff.Network;
-using RequestType = Vevidi.FindDiff.Network.NetworkManager.RequestType;
-using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameMediator;
+using Vevidi.FindDiff.GameUtils;
+using Vevidi.FindDiff.NetworkModel;
+using RequestType = Vevidi.FindDiff.Network.NetworkManager.RequestType;
 
 namespace Vevidi.FindDiff.Network
 {
@@ -16,7 +13,6 @@ namespace Vevidi.FindDiff.Network
     {
         private static void PrintError(string error)
         {
-            //Debug.LogError("Network error: \n" + error);
             GameManager.Instance.gameEventSystem.Publish(new LoadingStatusCommand(LoadingStatusCommand.eLoadingStatus.Error, error));
         }
 

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Vevidi.FindDiff.NetworkModel;
 using Vevidi.FindDiff.GameUtils;
+using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameModel
 {

@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Vevidi.FindDiff.Factories;
 using Vevidi.FindDiff.GameMediator;
-using Vevidi.FindDiff.GameModel;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
@@ -62,11 +59,5 @@ namespace Vevidi.FindDiff.GameLogic
             SaveManager = new SaveManager();
             SaveManager.LoadSave();
         }
-
-        //protected override void OnDestroy()
-        //{
-        //    SaveManager.SaveGame(LevelsManager.GetAllLevels(), SaveManager.SaveVersion);
-        //    base.OnDestroy();
-        //}
     }
 }

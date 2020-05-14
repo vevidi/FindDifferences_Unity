@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using Vevidi.FindDiff.NetworkModel;
-using Vevidi.FindDiff.Network;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameMediator;
-using TMPro;
+using Vevidi.FindDiff.Network;
+using Vevidi.FindDiff.NetworkModel;
 using eLoadingStatus = Vevidi.FindDiff.GameMediator.LoadingStatusCommand.eLoadingStatus;
 
 namespace Vevidi.FindDiff.UI
@@ -34,7 +29,6 @@ namespace Vevidi.FindDiff.UI
             bool result = await NetworkManager.Instance.CheckInternetConnection(StartDataLoad);
             if (!result)
             {
-                //Debug.LogError("Preloader -> No internet connction!");
                 gameEvents.Publish(new LoadingStatusCommand(eLoadingStatus.Error, "No internet connction!"));
             }
         }
@@ -47,8 +41,6 @@ namespace Vevidi.FindDiff.UI
 
         private void StartDataLoad()
         {
-            // TODO: add correct callbacks with notifications
-            //gameEvents
             GameDataDownloader.LoadGameData(OnLoadComplete, OnLoadError);
         }
 

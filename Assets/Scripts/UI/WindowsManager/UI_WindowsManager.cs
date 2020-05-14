@@ -40,7 +40,6 @@ namespace Vevidi.FindDiff.UI
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        //TODO: add caching instead of Instantiate/Destroy
         public void ShowWindow(UI_WindowConfig cfg)
         {
             var type = cfg.WType;

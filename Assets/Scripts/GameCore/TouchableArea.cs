@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.NetworkModel;
 
@@ -17,7 +14,7 @@ namespace Vevidi.FindDiff.GameLogic
         public void Init(DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
         {
             this.model = model;
-            radius = model.Radius * 0.8f; // IMPORTANT! multiplier added temporary for debug
+            radius = model.Radius;
             rectTransform.sizeDelta = Vector2.one * radius * 2;
             rectTransform.localPosition = new Vector2(model.X + offsetX, model.Y + offsetY);
             rectTransform.localScale = Vector3.one;

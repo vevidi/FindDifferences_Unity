@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Vevidi.FindDiff.GameLogic;
 using static Vevidi.FindDiff.GameLogic.SoundsManager;

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameModel;
