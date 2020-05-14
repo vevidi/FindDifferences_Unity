@@ -20,34 +20,32 @@ namespace Vevidi.FindDiff.GameLogic
         public void InitFromLevelsModel(LevelsModel model)
         {
             var levels = model.Levels;
-            for (int i=0; i<levels.Count; ++i)
+            for (int i = 0; i < levels.Count; ++i)
             {
-                var lDescrModel = new LevelDescriptionModel(levels[i], i == 0 || i == 1);
+                var lDescrModel = new LevelDescriptionModel(levels[i], i == 0 /*|| i == 1*/);
                 lDescrModel.LoadImage();
                 allLevels.Add(lDescrModel);
             }
             // save loaded info
-            GameSaveModel saveModel = new GameSaveModel(allLevels, model.Version);
-            GameManager.Instance.SaveManager.SaveGame(saveModel);
+            GameManager.Instance.SaveManager.SaveGame(allLevels, model.Version);
             Debug.LogWarning("->>>> InitFromLevelsModel");
         }
 
         public void InitFromLevelsModelAndSave(LevelsModel lModel, GameSaveModel sModel)
         {
             InitFromLevelsModel(lModel);
-            for (int i=0; i< allLevels.Count;++i)
+            for (int i = 0; i < allLevels.Count; ++i)
             {
                 var savedLevel = sModel.GetLevel(allLevels[i].Id);
                 allLevels[i].IsEnded = savedLevel.IsEnded;
                 allLevels[i].IsOpened = savedLevel.IsOpened;
             }
             // resave with new info
-            GameSaveModel saveModel = new GameSaveModel(allLevels, lModel.Version);
-            GameManager.Instance.SaveManager.SaveGame(saveModel);
+            GameManager.Instance.SaveManager.SaveGame(allLevels, lModel.Version);
             Debug.LogWarning("->>>> InitFromLevelsModelAndSave");
         }
 
-            public void InitFromLevelsSave(GameSaveModel model)
+        public void InitFromLevelsSave(GameSaveModel model)
         {
             allLevels = model.Levels;
             foreach (var level in allLevels)
@@ -70,6 +68,16 @@ namespace Vevidi.FindDiff.GameLogic
             if (selectedLevel == -1)
                 Debug.LogError("LevelsManager -> Level NOT selected!");
             return selectedLevel;
+        }
+
+        public void EndLevel(int levelID)
+        {
+            var currentLevel = GetLevelByID(levelID);
+            currentLevel.IsEnded = true;
+            var nextLevel = GetLevelByID(levelID + 1);
+            if (nextLevel != null)
+                nextLevel.IsOpened = true;
+            GameManager.Instance.SaveManager.SaveGame(allLevels);
         }
 
         public LevelDescriptionModel GetLevelByID(int id)

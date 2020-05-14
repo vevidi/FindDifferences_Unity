@@ -62,9 +62,10 @@ namespace Vevidi.FindDiff.GameLogic
         {
             Debug.Log("Trace 1");
             Debug.Log("-> " + touchableAreas.Count);
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Correct);
             touchableAreas.ForEach((ta) =>
             {
-               if (ta.GetId() == command.foundedDifference.Id)
+                if (ta.GetId() == command.foundedDifference.Id)
                     Destroy(ta.gameObject);
             });
             Debug.Log("->> " + touchableAreas.Count);
@@ -73,7 +74,11 @@ namespace Vevidi.FindDiff.GameLogic
             int newDiffValue = levelInfo.LevelInfo.Differences.Count - touchableAreas.Count / 2;
             gameEvents.Publish(new UpdateLevelUiCommand(newDiffValue));
             if (touchableAreas.Count == 0)
+            {
+                lManager.EndLevel(levelInfo.Id);
+                SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Win);
                 UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.GameEnded));
+            }
         }
 
         private void InitLevel()

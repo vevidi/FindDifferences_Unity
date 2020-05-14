@@ -62,11 +62,10 @@ namespace Vevidi.FindDiff.GameLogic
             SaveManager.LoadSave();
         }
 
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            GameSaveModel saveGame = new GameSaveModel(LevelsManager.GetAllLevels(), SaveManager.SaveVersion);
-            SaveManager.SaveGame(saveGame);
-        }
+        //protected override void OnDestroy()
+        //{
+        //    SaveManager.SaveGame(LevelsManager.GetAllLevels(), SaveManager.SaveVersion);
+        //    base.OnDestroy();
+        //}
     }
 }

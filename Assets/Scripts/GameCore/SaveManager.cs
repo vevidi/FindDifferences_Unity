@@ -17,8 +17,17 @@ namespace Vevidi.FindDiff.GameLogic
             GameSave = new GameSaveModel();
         }
 
-        public void SaveGame(GameSaveModel gameSave)
+        public void SaveGame(List<LevelDescriptionModel> allLevels, int version = -1)
         {
+            GameSaveModel saveModel = new GameSaveModel(allLevels, version);
+            GameManager.Instance.SaveManager.SaveGameInternal(saveModel);
+        }
+
+        private void SaveGameInternal(GameSaveModel gameSave, int version = -1)
+        {
+            int currVersion = version;
+            if (currVersion == -1)
+                currVersion = GameSave.Version;
             GameSave = gameSave;
             string saveJson = GameSave.Encode();
             Debug.Log("Save path -> " + Application.persistentDataPath + "/save.dat");
