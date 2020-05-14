@@ -21,11 +21,14 @@ namespace Vevidi.FindDiff.UI
         public void Init(LevelDescriptionModel model)
         {
             levelDescription = model;
+            Rect buttonRect = buttonImage.rectTransform.rect;
+            Texture2D buttonImageTexture = new Texture2D(model.LevelImage.width, model.LevelImage.height);
 
-            Debug.LogWarning("Model: " + model + " l img: " + model.LevelImage);
+            buttonImageTexture.SetPixels(model.LevelImage.GetPixels());
+            buttonImageTexture.Apply();
 
-            Rect rect = new Rect(0, 0, model.LevelImage.width, model.LevelImage.height);
-            buttonImage.overrideSprite = Sprite.Create(model.LevelImage,rect, Vector2.one * 0.5f);
+            Rect newRect = new Rect(0, 0, buttonImageTexture.width, buttonImageTexture.height);
+            buttonImage.overrideSprite = Sprite.Create(buttonImageTexture, newRect, Vector2.one * 0.5f);
         }
 
     }

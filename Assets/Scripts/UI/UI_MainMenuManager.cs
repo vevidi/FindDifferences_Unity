@@ -8,8 +8,10 @@ namespace Vevidi.FindDiff.UI
 {
     public class UI_MainMenuManager : MonoBehaviour
     {
+#pragma warning disable 0649
         [SerializeField]
         private RectTransform levelListView;
+#pragma warning restore 0649
 
         private GameManager gManager;
 
@@ -24,7 +26,7 @@ namespace Vevidi.FindDiff.UI
             foreach(LevelDescriptionModel level in allLevels)
             {
                 UI_LevelButton button = GameManager.Instance.UiFactory.CreateLevelButton(level);
-                button.transform.parent = levelListView;
+                button.transform.SetParent(levelListView,false);
             }
         }
 

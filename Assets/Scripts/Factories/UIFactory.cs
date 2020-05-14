@@ -8,8 +8,10 @@ namespace Vevidi.FindDiff.Factories
 {
     public class UIFactory : MonoBehaviour
     {
+#pragma warning disable 0649
         [SerializeField]
         private UI_LevelButton levelButtonPrefab;
+#pragma warning restore 0649
 
         private T CreateItem<T>(T objToClone) where T : UnityEngine.Object
         {
