@@ -8,8 +8,8 @@ namespace Vevidi.FindDiff.GameLogic
 {
     public class LevelsManager
     {
-
         private List<LevelDescriptionModel> allLevels;
+        private int selectedLevel = -1;
 
         public LevelsManager()
         {
@@ -58,6 +58,18 @@ namespace Vevidi.FindDiff.GameLogic
         public List<LevelDescriptionModel> GetAllLevels()
         {
             return allLevels;
+        }
+
+        public void SelectLevel(int id)
+        {
+            selectedLevel = id;
+        }
+
+        public int GetSelectedLevel()
+        {
+            if (selectedLevel == -1)
+                Debug.LogError("LevelsManager -> Level NOT selected!");
+            return selectedLevel;
         }
 
         public LevelDescriptionModel GetLevelByID(int id)

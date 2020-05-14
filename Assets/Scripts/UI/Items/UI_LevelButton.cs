@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameModel;
 
 namespace Vevidi.FindDiff.UI
@@ -37,6 +39,8 @@ namespace Vevidi.FindDiff.UI
             Rect newRect = new Rect(0, 0, buttonImageTexture.width, buttonImageTexture.height);
             buttonImage.overrideSprite = Sprite.Create(buttonImageTexture, newRect, Vector2.one * 0.5f);
 
+            levelButton.onClick.AddListener(OnClick);
+
             if (levelDescription.IsEnded)
                 levelPassedCheckmark.SetActive(true);
             else if (!levelDescription.IsOpened)
@@ -46,5 +50,15 @@ namespace Vevidi.FindDiff.UI
             }
         }
 
+        private void OnDestroy()
+        {
+            levelButton.onClick.RemoveListener(OnClick);
+        }
+
+        private void OnClick()
+        {
+            GameManager.Instance.LevelsManager.SelectLevel(levelDescription.Id);
+            SceneManager.LoadScene(GameVariables.LevelScene);
+        }
     }
 }

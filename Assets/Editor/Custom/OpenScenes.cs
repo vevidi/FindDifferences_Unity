@@ -6,14 +6,19 @@ using UnityEngine;
 
 public class OpenScenes
 {
+    private const string SC_PREFIX = "Assets/Scenes/";
+    private const string SC_SUFFIX = ".unity";
+
     [MenuItem("Custom/Run from preloader")]
     static void Run()
     {
-        var newSettings = new EditorBuildSettingsScene[2];
-        var sceneToAdd = new EditorBuildSettingsScene("Assets/Scenes/Preloader.unity", true);
+        var newSettings = new EditorBuildSettingsScene[3];
+        var sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX+GameVariables.PreloaderScene+SC_SUFFIX, true);
         newSettings[0] = sceneToAdd;
-        sceneToAdd = new EditorBuildSettingsScene("Assets/Scenes/MainMenu.unity", true);
+        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.MainMenuScene + SC_SUFFIX, true);
         newSettings[1] = sceneToAdd;
+        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.LevelScene + SC_SUFFIX, true);
+        newSettings[2] = sceneToAdd;
         EditorBuildSettings.scenes = newSettings;
 
         OpenPreloader();
@@ -23,12 +28,18 @@ public class OpenScenes
     [MenuItem("Custom/Open Preloader scene")]
     static void OpenPreloader()
     {
-        EditorSceneManager.OpenScene("Assets/Scenes/Preloader.unity");
+        EditorSceneManager.OpenScene(SC_PREFIX + GameVariables.PreloaderScene + SC_SUFFIX);
     }
 
     [MenuItem("Custom/Open Main Menu scene")]
-    static void OpenPhoneMob()
+    static void OpenMainMenu()
     {
-        EditorSceneManager.OpenScene("Assets/Scenes/MainMenu.unity");
+        EditorSceneManager.OpenScene(SC_PREFIX + GameVariables.MainMenuScene + SC_SUFFIX);
+    }
+
+    [MenuItem("Custom/Open Level scene")]
+    static void OpenLevel()
+    {
+        EditorSceneManager.OpenScene(SC_PREFIX + GameVariables.LevelScene + SC_SUFFIX);
     }
 }
