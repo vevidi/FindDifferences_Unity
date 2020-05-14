@@ -8,6 +8,13 @@ namespace Vevidi.FindDiff.UI
 {
     public class UI_LevelButton : MonoBehaviour
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private GameObject blurredImage;
+        [SerializeField]
+        private GameObject levelPassedCheckmark;
+#pragma warning restore 0649
+
         private Button levelButton;
         private Image buttonImage;
         private LevelDescriptionModel levelDescription;
@@ -29,6 +36,14 @@ namespace Vevidi.FindDiff.UI
 
             Rect newRect = new Rect(0, 0, buttonImageTexture.width, buttonImageTexture.height);
             buttonImage.overrideSprite = Sprite.Create(buttonImageTexture, newRect, Vector2.one * 0.5f);
+
+            if (levelDescription.IsEnded)
+                levelPassedCheckmark.SetActive(true);
+            else if (!levelDescription.IsOpened)
+            {
+                blurredImage.SetActive(true);
+                levelButton.enabled = false;
+            }
         }
 
     }

@@ -10,6 +10,8 @@ namespace Vevidi.FindDiff.NetworkModel
 #pragma warning disable 0649
         [SerializeField]
         private List<LevelInfoModel> levels;
+        [SerializeField]
+        private int version;
 #pragma warning restore 0649
 
         public LevelsModel()
@@ -23,6 +25,7 @@ namespace Vevidi.FindDiff.NetworkModel
         }
 
         public List<LevelInfoModel> Levels { get => levels; set => levels = value; }
+        public int Version { get => version; }
 
         public void Decode(string json)
         {

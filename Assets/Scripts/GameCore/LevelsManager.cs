@@ -24,14 +24,35 @@ namespace Vevidi.FindDiff.GameLogic
             {
                 var lDescrModel = new LevelDescriptionModel(levels[i], i == 0);
                 lDescrModel.LoadImage();
-                Debug.LogWarning("ZZZZ " + lDescrModel.LevelImage);
                 allLevels.Add(lDescrModel);
             }
+            // save loaded info
+            GameSaveModel saveModel = new GameSaveModel(allLevels, model.Version);
+            GameManager.Instance.SaveManager.SaveGame(saveModel);
+            Debug.LogWarning("->>>> InitFromLevelsModel");
         }
 
-        public void InitFromLevelsSave(GameSaveModel model)
+        public void InitFromLevelsModelAndSave(LevelsModel lModel, GameSaveModel sModel)
         {
+            InitFromLevelsModel(lModel);
+            for (int i=0; i< allLevels.Count;++i)
+            {
+                var savedLevel = sModel.GetLevel(allLevels[i].Id);
+                allLevels[i].IsEnded = savedLevel.IsEnded;
+                allLevels[i].IsOpened = savedLevel.IsOpened;
+            }
+            // resave with new info
+            GameSaveModel saveModel = new GameSaveModel(allLevels, lModel.Version);
+            GameManager.Instance.SaveManager.SaveGame(saveModel);
+            Debug.LogWarning("->>>> InitFromLevelsModelAndSave");
+        }
 
+            public void InitFromLevelsSave(GameSaveModel model)
+        {
+            allLevels = model.Levels;
+            foreach (var level in allLevels)
+                level.LoadImage();
+            Debug.LogWarning("->>>> InitFromLevelsSave");
         }
 
         public List<LevelDescriptionModel> GetAllLevels()

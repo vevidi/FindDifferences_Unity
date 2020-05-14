@@ -7,6 +7,7 @@ using Vevidi.FindDiff.NetworkModel;
 using Vevidi.FindDiff.Network;
 using RequestType = Vevidi.FindDiff.Network.NetworkManager.RequestType;
 using Vevidi.FindDiff.Utils;
+using Vevidi.FindDiff.GameLogic;
 
 namespace Vevidi.FindDiff.Network
 {
@@ -38,9 +39,17 @@ namespace Vevidi.FindDiff.Network
 
         public static async void LoadGameData(Action<LevelsModel> onComplete, Action<string> onError)
         {
+            var sManager = GameManager.Instance.SaveManager;
             var gameInfo = await LoadGameInfo();
             if (gameInfo == null)
                 onError?.Invoke("Info not loaded!");
+            else if (sManager.SaveLoaded && sManager.SaveVersion == gameInfo.Version)
+            {
+                // TODO: think about better way to make this logic
+                onComplete?.Invoke(gameInfo);
+                return; // prevent redownloading images
+            }
+
             (bool isError, string fName) loadImgResult = await LoadImages(gameInfo);
             if (loadImgResult.isError == true)
                 onError?.Invoke("Image not loaded: " + loadImgResult.fName);
