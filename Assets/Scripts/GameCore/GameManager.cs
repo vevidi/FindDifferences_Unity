@@ -41,9 +41,7 @@ namespace Vevidi.FindDiff.GameLogic
                 return;
             }
             DontDestroyOnLoad(gameObject);
-            Debug.Log("GETTING UI FACTORY");
             UiFactory = GetComponent<UIFactory>();
-            Debug.Log(UiFactory + " ++++");
         }
 
         private void Start()

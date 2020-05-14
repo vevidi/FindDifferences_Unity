@@ -23,7 +23,6 @@ namespace Vevidi.FindDiff.UI
             List<LevelDescriptionModel> allLevels = gManager.LevelsManager.GetAllLevels();
             foreach(LevelDescriptionModel level in allLevels)
             {
-                Debug.Log("!!! " + GameManager.Instance.UiFactory);
                 UI_LevelButton button = GameManager.Instance.UiFactory.CreateLevelButton(level);
                 button.transform.parent = levelListView;
             }

@@ -31,8 +31,6 @@ namespace Vevidi.FindDiff.NetworkModel
 
         public string Encode()
         {
-            //foreach (var v in levels)
-            //    Debug.Log(v);
             return JsonUtility.ToJson(this);
         }
 

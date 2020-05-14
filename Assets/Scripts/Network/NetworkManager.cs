@@ -78,8 +78,6 @@ namespace Vevidi.FindDiff.Network
         {
             UnityWebRequest req;
 
-            Debug.Log("RTV: " + url);
-
             if (type == RequestType.Get)
                 req = UnityWebRequest.Get(url);
             else

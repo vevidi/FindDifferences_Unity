@@ -24,6 +24,7 @@ namespace Vevidi.FindDiff.GameLogic
             {
                 var lDescrModel = new LevelDescriptionModel(levels[i], i == 0);
                 lDescrModel.LoadImage();
+                Debug.LogWarning("ZZZZ " + lDescrModel.LevelImage);
                 allLevels.Add(lDescrModel);
             }
         }

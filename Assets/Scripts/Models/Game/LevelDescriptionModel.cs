@@ -38,15 +38,12 @@ namespace Vevidi.FindDiff.GameModel
         public List<DifferenceInfoModel> Differences { get => levelInfo.Differences; }
         public bool IsOpened { get => isOpened; set => isOpened = value; }
         public bool IsEnded { get => isEnded; set => isEnded = value; }
-        public Texture2D LevelImage { get; set; }
+        public Texture2D LevelImage { get => levelImage; }
         public LevelInfoModel LevelInfo { get => levelInfo; }
 
         public void LoadImage()
         {
-            Debug.Log("Load image: " + levelInfo.Id + ".jpg");
             levelImage = SaveLoadUtility.LoadImage(levelInfo.Id + ".jpg");
-            Debug.Log(levelImage);
-            Debug.Log("------------");
         }
     }
 }
