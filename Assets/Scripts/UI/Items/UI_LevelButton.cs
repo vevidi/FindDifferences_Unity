@@ -64,6 +64,7 @@ namespace Vevidi.FindDiff.UI
         private void OnClick()
         {
             Debug.Log("Selecting level: " + levelDescription.Id);
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Click);
             GameManager.Instance.LevelsManager.SelectLevel(levelDescription.Id);
             SceneManager.LoadScene(GameVariables.LevelScene);
         }

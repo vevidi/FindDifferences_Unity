@@ -72,6 +72,8 @@ namespace Vevidi.FindDiff.GameLogic
             Debug.Log("->>> " + touchableAreas.Count);
             int newDiffValue = levelInfo.LevelInfo.Differences.Count - touchableAreas.Count / 2;
             gameEvents.Publish(new UpdateLevelUiCommand(newDiffValue));
+            if (touchableAreas.Count == 0)
+                UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.GameEnded));
         }
 
         private void InitLevel()

@@ -6,4 +6,6 @@
     public static string PreloaderScene = "Preloader";
     public static string MainMenuScene = "MainMenu";
     public static string LevelScene = "LevelScene";
+
+    public static string PopupsRoot = "UI_PopupsRoot";
 }

@@ -48,6 +48,7 @@ namespace Vevidi.FindDiff.UI
 
         private void OnHomeButtonClick()
         {
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Click);
             SceneManager.LoadScene(GameVariables.MainMenuScene);
         }
 
