@@ -5,12 +5,12 @@ public class SingletonBase<T> : MonoBehaviour where T : MonoBehaviour
     protected static bool isShuttingDown = false;
     protected static T instance;
 
-    private void OnApplicationQuit()
+    protected virtual void OnApplicationQuit()
     {
         isShuttingDown = true;
     }
     
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         isShuttingDown = true;
     }

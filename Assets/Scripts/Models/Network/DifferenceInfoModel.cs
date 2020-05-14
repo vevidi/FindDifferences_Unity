@@ -7,14 +7,17 @@ namespace Vevidi.FindDiff.NetworkModel
     public class DifferenceInfoModel
     {
         [SerializeField]
+        private int id;
+        [SerializeField]
         private float x;
         [SerializeField]
         private float y;
         [SerializeField]
         private float r;
 
-        public DifferenceInfoModel(float x, float y, float r)
+        public DifferenceInfoModel(int id, float x, float y, float r)
         {
+            this.id = id;
             this.x = x;
             this.y = y;
             this.r = r;
@@ -23,10 +26,11 @@ namespace Vevidi.FindDiff.NetworkModel
         public float X { get => x; }
         public float Y { get => y; }
         public float Radius { get => r; }
+        public int Id { get => id; }
 
         public override string ToString()
         {
-            return "X: " + x + " Y: " + y + " R: " + r;
+            return "ID:" + id + " X: " + x + " Y: " + y + " R: " + r;
         }
     }
 }

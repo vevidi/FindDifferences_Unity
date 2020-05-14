@@ -24,7 +24,9 @@ namespace Vevidi.FindDiff.GameLogic
 
         public LevelsManager LevelsManager { get; private set; }
         public UIFactory UiFactory { get; private set; }
+        public LevelObjectsFactory LevelObjFactory { get; private set; }
         public SaveManager SaveManager { get; private set; }
+        public Mediator gameEventSystem { get; private set; }
 
         public void InitLevelsManager(LevelsModel model)
         {
@@ -41,11 +43,6 @@ namespace Vevidi.FindDiff.GameLogic
             {
                 LevelsManager.InitFromLevelsSave(SaveManager.GameSave);
             }
-
-            //if (SaveManager.SaveLoaded && SaveManager.SaveVersion == model.Version)
-            //    LevelsManager.InitFromLevelsSave(SaveManager.GameSave);
-            //else
-            //    LevelsManager.InitFromLevelsModel(model);
         }
 
         private void Awake()
@@ -58,13 +55,16 @@ namespace Vevidi.FindDiff.GameLogic
                 return;
             }
             DontDestroyOnLoad(gameObject);
+            gameEventSystem = new Mediator();
             UiFactory = GetComponent<UIFactory>();
+            LevelObjFactory = GetComponent<LevelObjectsFactory>();
             SaveManager = new SaveManager();
             SaveManager.LoadSave();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             GameSaveModel saveGame = new GameSaveModel(LevelsManager.GetAllLevels(), SaveManager.SaveVersion);
             SaveManager.SaveGame(saveGame);
         }

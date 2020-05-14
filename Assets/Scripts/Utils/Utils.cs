@@ -30,6 +30,11 @@ namespace Vevidi.FindDiff.GameUtils
             return GetSpriteFromTex2D(texture, SpritePivot.Center);
         }
 
+        public static Sprite GetSpriteFromTex2D(Texture2D texture, Rect rect)
+        {
+            return Sprite.Create(texture, rect, SpritePivot.Center);
+        }
+
         public static Sprite GetSpriteFromTex2D(Texture2D texture, Vector2 pivot)
         {
             Rect newRect = new Rect(0, 0, texture.width, texture.height);

@@ -22,7 +22,7 @@ namespace Vevidi.FindDiff.GameLogic
             var levels = model.Levels;
             for (int i=0; i<levels.Count; ++i)
             {
-                var lDescrModel = new LevelDescriptionModel(levels[i], i == 0/* || i == 1*/);
+                var lDescrModel = new LevelDescriptionModel(levels[i], i == 0 || i == 1);
                 lDescrModel.LoadImage();
                 allLevels.Add(lDescrModel);
             }
