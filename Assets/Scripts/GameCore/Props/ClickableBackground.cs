@@ -10,7 +10,6 @@ namespace Vevidi.FindDiff.GameLogic
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            Debug.Log("Pointer down -> " + eventData.position + " " + eventData.pressPosition + " " + eventData.worldPosition);
             OnBackgroundClick?.Invoke(eventData);
         }
     }

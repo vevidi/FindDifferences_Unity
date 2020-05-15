@@ -435,7 +435,7 @@ GameObject:
   - component: {fileID: 4484141000338446294}
   - component: {fileID: 4799362957748247663}
   - component: {fileID: 7183607288447839961}
-  - component: {fileID: 253531003825498040}
+  - component: {fileID: 1038093515729903148}
   m_Layer: 5
   m_Name: UI_WinPopup
   m_TagString: Untagged
@@ -543,7 +543,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &253531003825498040
+--- !u!114 &1038093515729903148
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -552,10 +552,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3260106750930146567}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1a55ffb69ca71545b6b548037eb2b66, type: 3}
+  m_Script: {fileID: 11500000, guid: d9a3dd8fa5f9aa14aa3a0e0e8c3442a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   backToMenuButton: {fileID: 3152285778441050027}
+  nextLvButton: {fileID: 6529533061368573187}
 --- !u!1 &4918143315671980951
 GameObject:
   m_ObjectHideFlags: 0

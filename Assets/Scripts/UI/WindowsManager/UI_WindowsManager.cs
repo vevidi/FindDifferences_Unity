@@ -17,7 +17,8 @@ namespace Vevidi.FindDiff.UI
 
         public enum eWindowType
         {
-            GameEnded
+            Win,
+            Lose
         }
 
         public static UI_WindowsManager Instance { get; private set; }
@@ -43,24 +44,30 @@ namespace Vevidi.FindDiff.UI
         public void ShowWindow(UI_WindowConfig cfg)
         {
             var type = cfg.WType;
-            GameObject prefab = windows.Find(rez => rez.type.Equals(type)).prefab;
-            if (prefab != null && popupsRoot != null)
+            var windowInfo = windows.Find(rez => rez.type.Equals(type));
+            if (windowInfo != null)
             {
-                GameObject wnd = Instantiate(prefab, popupsRoot);
+                GameObject prefab = windowInfo.prefab;
+                if (prefab != null && popupsRoot != null)
+                {
+                    GameObject wnd = Instantiate(prefab, popupsRoot);
 
-                Debug.LogWarning(wnd.name);
+                    Debug.LogWarning(wnd.name);
 
-                IBasePopup popup = wnd.GetComponent<IBasePopup>();
-                if (popup != null)
-                    popup.Init(cfg);
-                openedWindows.Add(type, wnd);
+                    IBasePopup popup = wnd.GetComponent<IBasePopup>();
+                    if (popup != null)
+                        popup.Init(cfg);
+                    openedWindows.Add(type, wnd);
 #if UNITY_EDITOR
-                Utils.PrintDictionary(openedWindows);
+                    Utils.PrintDictionary(openedWindows);
 #endif
-                windowsStack.Push(type);
+                    windowsStack.Push(type);
+                }
+                else
+                    Debug.LogError("Cannot find prefab for type <" + type + "> or type is incorrect!");
             }
             else
-                Debug.LogError("Cannot find prefab for type <" + type + "> or type is incorrect!");
+                Debug.LogError("Windows manager does not contain window info for type: " + type);
         }
 
         public void HideWindow(eWindowType type)

@@ -36,8 +36,8 @@ namespace Vevidi.FindDiff.UI
                
         private void OnLoadingStatusChange(LoadingStatusCommand command)
         {
-            string prefix = command.status == eLoadingStatus.Ok ? "OK -> " : "ERROR -> ";
-            loadingStatus.text = "Status: " + prefix + " " + command.message;
+            string prefix = command.Status == eLoadingStatus.Ok ? "OK -> " : "ERROR -> ";
+            loadingStatus.text = "Status: " + prefix + " " + command.Message;
         }
 
         private void StartDataLoad()

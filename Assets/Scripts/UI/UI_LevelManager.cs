@@ -17,31 +17,32 @@ namespace Vevidi.FindDiff.UI
         public TextMeshProUGUI diffFoundText;
 #pragma warning restore 0649
         private Mediator gameEvents;
-        private int diffCount;
-
-        public void Init(int diffCount)
-        {
-            this.diffCount = diffCount;
-            diffFoundText.text = string.Format("Differences found: {0}/{1}", 0, diffCount);
-        }
 
         private void Awake()
         {
             gameEvents = GameManager.Instance.gameEventSystem;
             homeButton.onClick.AddListener(OnHomeButtonClick);
-            gameEvents.Subscribe<UpdateLevelUiCommand>(OnDifferenceFound);
+            gameEvents.Subscribe<UpdateDiffCountCommand>(OnDifferenceFound);
+            gameEvents.Subscribe<UpdateLivesCountCommand>(OnLivesCountChanged);
         }
 
         private void OnDestroy()
         {
             homeButton.onClick.RemoveListener(OnHomeButtonClick);
-            gameEvents.DeleteSubscriber<UpdateLevelUiCommand>(OnDifferenceFound);
+            gameEvents.DeleteSubscriber<UpdateDiffCountCommand>(OnDifferenceFound);
+            gameEvents.DeleteSubscriber<UpdateLivesCountCommand>(OnLivesCountChanged);
         }
 
-        private void OnDifferenceFound(UpdateLevelUiCommand command)
+        private void OnDifferenceFound(UpdateDiffCountCommand command)
         {
-            Debug.Log(command.diffFoundValue);
-            diffFoundText.text = string.Format("Differences found: {0}/{1}", command.diffFoundValue, diffCount);
+            Debug.Log(command.DiffFoundValue);
+            diffFoundText.text = string.Format("Differences found: {0}/{1}", command.DiffFoundValue, command.MaxValue);
+        }
+
+        private void OnLivesCountChanged(UpdateLivesCountCommand command)
+        {
+            // TODO: add some stuff here
+            Debug.Log("Lives count -> " + command.LivesCount);
         }
 
         private void OnHomeButtonClick()

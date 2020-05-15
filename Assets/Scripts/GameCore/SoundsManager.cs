@@ -12,7 +12,8 @@ namespace Vevidi.FindDiff.GameLogic
             Click,
             Correct,
             Wrong,
-            Win
+            Win,
+            Lose
         }
 
         [System.Serializable]

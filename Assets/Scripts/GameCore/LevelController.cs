@@ -18,21 +18,22 @@ namespace Vevidi.FindDiff.GameLogic
         private Image backgroundImage;
         [SerializeField]
         private RectTransform gameFieldRoot;
-        //TODO: think abou deattaching UI script from LevelController (m.b. init through mediator?)
-        [SerializeField]
-        private UI_LevelManager lvManager;
 #pragma warning restore 0649
 
         private LevelDescriptionModel levelInfo;
         private LevelsManager levelManager;
         private LevelObjectsFactory levelObjFactory;
         private Mediator gameEvents;
+
         private List<TouchableArea> touchableAreas;
+        private List<RectTransform> foundedCheckmarks;
         private ClickableBackground backgroundClickArea;
         private RectTransform gameFieldImageTransform;
 
         private int gameFieldWidth;
         private int gameFieldHeight;
+
+        private int liveCount = 5;
 
         private void UpdateSize()
         {
@@ -45,13 +46,18 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void Awake()
         {
+            // cache some vars
             levelManager = GameManager.Instance.LevelsManager;
             levelInfo = levelManager.GetLevelByID(levelManager.GetSelectedLevel());
             gameEvents = GameManager.Instance.gameEventSystem;
             levelObjFactory = GameManager.Instance.LevelObjFactory;
+            //subscribe listeners
             gameEvents.Subscribe<DiffFoundCommand>(OnDiffFound);
-            touchableAreas = new List<TouchableArea>();
+            gameEvents.Subscribe<NextLevelCommand>(GoToNextLevel);
+            gameEvents.Subscribe<RestartLevelCommand>(RestartLevel);
 
+            touchableAreas = new List<TouchableArea>();
+            foundedCheckmarks = new List<RectTransform>();
             gameFieldWidth = (int)gameFieldRoot.rect.width;
             gameFieldHeight = (int)gameFieldRoot.rect.height;
             gameFieldImageTransform = backgroundImage.rectTransform;
@@ -71,6 +77,10 @@ namespace Vevidi.FindDiff.GameLogic
                 return;
             MissTapCheckmark checkmark = levelObjFactory.CreateMissTapCheckmark(gameFieldRoot);
             checkmark.transform.localPosition = localCursor;
+            --liveCount;
+            gameEvents.Publish(new UpdateLivesCountCommand(liveCount));
+            if (liveCount == 0)
+                LoseGame();
         }
 
         private void OnDiffFound(DiffFoundCommand command)
@@ -79,23 +89,35 @@ namespace Vevidi.FindDiff.GameLogic
 
             touchableAreas.ForEach((ta) =>
             {
-                if (ta.GetId() == command.foundedDifference.Id)
+                if (ta.GetId() == command.FoundedDifference.Id)
                 {
                     RectTransform checkmark = levelObjFactory.CreateCheckmark(gameFieldRoot);
                     checkmark.localPosition = ta.transform.localPosition;
+                    foundedCheckmarks.Add(checkmark);
                     Destroy(ta.gameObject);
                 }
             });
-            touchableAreas.RemoveAll((ta) => { return ta.GetId() == command.foundedDifference.Id; });
+            touchableAreas.RemoveAll((ta) => { return ta.GetId() == command.FoundedDifference.Id; });
 
-            int newDiffValue = levelInfo.LevelInfo.Differences.Count - touchableAreas.Count / 2;
-            gameEvents.Publish(new UpdateLevelUiCommand(newDiffValue));
+            int diffCount = levelInfo.Differences.Count;
+            int newDiffValue = levelInfo.Differences.Count - touchableAreas.Count / 2;
+            gameEvents.Publish(new UpdateDiffCountCommand(newDiffValue, diffCount));
             if (touchableAreas.Count == 0)
-            {
-                levelManager.EndLevel(levelInfo.Id);
-                SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Win);
-                UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.GameEnded));
-            }
+                WinGame();
+        }
+
+        private void WinGame()
+        {
+            levelManager.EndLevel(levelInfo.Id);
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Win);
+            UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.Win));
+        }
+
+        private void LoseGame()
+        {
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Lose);
+            UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.Lose));
+
         }
 
         private void InitLevel()
@@ -109,7 +131,32 @@ namespace Vevidi.FindDiff.GameLogic
                 area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff);
                 touchableAreas.Add(area);
             }
-            lvManager.Init(diffs.Count);
+            liveCount = 5;
+            gameEvents.Publish(new UpdateLivesCountCommand(liveCount));
+            gameEvents.Publish(new UpdateDiffCountCommand(diffs.Count, diffs.Count));
+        }
+
+        private void ClearLevel()
+        {
+            touchableAreas.ForEach((ta) => Destroy(ta.gameObject));
+            touchableAreas.Clear();
+            foundedCheckmarks.ForEach((fc) => Destroy(fc.gameObject));
+            foundedCheckmarks.Clear();
+        }
+
+        private void GoToNextLevel(NextLevelCommand command)
+        {
+            int selectedLevelID = levelManager.GetSelectedLevel();
+            levelManager.SelectLevel(selectedLevelID + 1);
+            levelInfo = levelManager.GetLevelByID(selectedLevelID + 1);
+            ClearLevel();
+            InitLevel();
+        }
+
+        private void RestartLevel(RestartLevelCommand command)
+        {
+            ClearLevel();
+            InitLevel();
         }
 
         private void Start()
@@ -124,8 +171,11 @@ namespace Vevidi.FindDiff.GameLogic
 
         protected override void OnDestroy()
         {
+            // unsubscribe all
             backgroundClickArea.OnBackgroundClick -= OnMissTap;
             gameEvents.DeleteSubscriber<DiffFoundCommand>(OnDiffFound);
+            gameEvents.DeleteSubscriber<NextLevelCommand>(GoToNextLevel);
+            gameEvents.DeleteSubscriber<RestartLevelCommand>(RestartLevel);
         }
     }
 }

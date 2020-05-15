@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Vevidi.FindDiff.GameLogic;
+using Vevidi.FindDiff.GameMediator;
 
 namespace Vevidi.FindDiff.UI
 {
@@ -10,18 +12,20 @@ namespace Vevidi.FindDiff.UI
         [SerializeField]
         private Button backToMenuButton;
 #pragma warning restore 0649
+        protected Mediator gameEvents;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             backToMenuButton.onClick.AddListener(OnBackToMenuButtonClick);
+            gameEvents = GameManager.Instance.gameEventSystem;
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
             backToMenuButton.onClick.RemoveListener(OnBackToMenuButtonClick);
         }
 
-        private void OnBackToMenuButtonClick()
+        protected void OnBackToMenuButtonClick()
         {
             base.OnCloseButtonClick();
             SceneManager.LoadScene(GameVariables.MainMenuScene);

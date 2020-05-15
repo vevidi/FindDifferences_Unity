@@ -1,21 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Vevidi.FindDiff.GameMediator.Commands
+﻿namespace Vevidi.FindDiff.GameMediator.Commands
 {
-    public class NextLevelCommand : MonoBehaviour
+    // later some data will be added here
+    public class NextLevelCommand : ICommand
     {
-        // Start is called before the first frame update
-        void Start()
-        {
 
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
     }
 }

@@ -8,13 +8,13 @@
             Error
         }
 
-        public string message;
-        public eLoadingStatus status;
+        public string Message { get; private set; }
+        public eLoadingStatus Status { get; private set; }
 
         public LoadingStatusCommand(eLoadingStatus status, string message)
         {
-            this.message = message;
-            this.status = status;
+            Message = message;
+            Status = status;
         }
     }
 }

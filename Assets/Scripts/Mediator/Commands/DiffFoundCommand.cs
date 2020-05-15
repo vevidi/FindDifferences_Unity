@@ -5,13 +5,13 @@ namespace Vevidi.FindDiff.GameMediator.Commands
 {
     public class DiffFoundCommand : ICommand
     {
-        public DifferenceInfoModel foundedDifference;
-        public TouchableArea sender;
+        public TouchableArea Sender { get; private set; }
+        public DifferenceInfoModel FoundedDifference { get; private set; }
 
         public DiffFoundCommand(DifferenceInfoModel foundedDifference, TouchableArea sender)
         {
-            this.foundedDifference = foundedDifference;
-            this.sender = sender;
+            FoundedDifference = foundedDifference;
+            Sender = sender;
         }
     }
 }

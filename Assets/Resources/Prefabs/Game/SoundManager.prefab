@@ -55,6 +55,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 025eac53d76598e438a57497f4794988, type: 3}
   - type: 3
     clip: {fileID: 8300000, guid: be8ae7b9df5906e458464f8ef92589d1, type: 3}
+  - type: 4
+    clip: {fileID: 8300000, guid: 3745148d1a6068946801c79d1fde728d, type: 3}
   backSounds: []
   sourceOneShot: {fileID: 7642576683565108564}
   sourceBackground: {fileID: 3198281390272586310}
