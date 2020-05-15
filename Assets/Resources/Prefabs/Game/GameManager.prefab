@@ -75,3 +75,5 @@ MonoBehaviour:
     type: 3}
   checkMarkPrefab: {fileID: 8182326510857156731, guid: 001aa0e899557b943aedc89df9891aec,
     type: 3}
+  missTapMarkPrefab: {fileID: 5266644879531384734, guid: b0b1bb07569c72b4e922fe63c3baa674,
+    type: 3}

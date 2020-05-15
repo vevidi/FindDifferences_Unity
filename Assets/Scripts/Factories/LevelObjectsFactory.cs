@@ -11,6 +11,8 @@ namespace Vevidi.FindDiff.Factories
         private TouchableArea touchableAreaPrefab;
         [SerializeField]
         private RectTransform checkMarkPrefab;
+        [SerializeField]
+        private MissTapCheckmark missTapMarkPrefab;
 #pragma warning restore 0649
 
         public TouchableArea CreateTouchableArea(RectTransform parent, DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
@@ -26,6 +28,12 @@ namespace Vevidi.FindDiff.Factories
             RectTransform checkmark = CreateItem(checkMarkPrefab);
             checkmark.SetParent(parent);
             checkmark.localScale = Vector3.one;
+            return checkmark;
+        }
+
+        public MissTapCheckmark CreateMissTapCheckmark(RectTransform parent)
+        {
+            MissTapCheckmark checkmark = CreateItem(missTapMarkPrefab,parent);
             return checkmark;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vevidi.FindDiff.Factories;
 using Vevidi.FindDiff.GameMediator;
@@ -22,11 +23,11 @@ namespace Vevidi.FindDiff.GameLogic
 #pragma warning restore 0649
 
         private LevelDescriptionModel levelInfo;
-        private LevelsManager lManager;
-        private LevelObjectsFactory loFactory;
+        private LevelsManager levelManager;
+        private LevelObjectsFactory levelObjFactory;
         private Mediator gameEvents;
         private List<TouchableArea> touchableAreas;
-        private Button backgroundClickArea;
+        private ClickableBackground backgroundClickArea;
         private RectTransform gameFieldImageTransform;
 
         private int gameFieldWidth;
@@ -43,10 +44,10 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void Awake()
         {
-            lManager = GameManager.Instance.LevelsManager;
-            levelInfo = lManager.GetLevelByID(lManager.GetSelectedLevel());
+            levelManager = GameManager.Instance.LevelsManager;
+            levelInfo = levelManager.GetLevelByID(levelManager.GetSelectedLevel());
             gameEvents = GameManager.Instance.gameEventSystem;
-            loFactory = GameManager.Instance.LevelObjFactory;
+            levelObjFactory = GameManager.Instance.LevelObjFactory;
             gameEvents.Subscribe<DiffFoundCommand>(OnDiffFound);
             touchableAreas = new List<TouchableArea>();
 
@@ -54,29 +55,35 @@ namespace Vevidi.FindDiff.GameLogic
             gameFieldHeight = (int)gameFieldRoot.rect.height;
             gameFieldImageTransform = backgroundImage.rectTransform;
 
-            backgroundClickArea = backgroundImage.GetComponent<Button>();
-            backgroundClickArea.onClick.AddListener(OnMissTap);
+            backgroundClickArea = backgroundImage.GetComponent<ClickableBackground>();
+            backgroundClickArea.OnBackgroundClick += OnMissTap;
             UpdateSize();
 
             Debug.Log("Level controller -> Loaded level: " + levelInfo);
         }
 
-        private void OnMissTap()
+        private void OnMissTap(PointerEventData data)
         {
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Wrong);
+            Vector2 localCursor;
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(gameFieldImageTransform, data.position, data.pressEventCamera, out localCursor))
+                return;
+            MissTapCheckmark checkmark = levelObjFactory.CreateMissTapCheckmark(gameFieldRoot);
+            checkmark.transform.localPosition = localCursor;
         }
 
         private void OnDiffFound(DiffFoundCommand command)
         {
-            RectTransform checkmark = loFactory.CreateCheckmark(gameFieldRoot);
-            checkmark.localPosition = command.sender.transform.localPosition;
-
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Correct);
 
             touchableAreas.ForEach((ta) =>
             {
                 if (ta.GetId() == command.foundedDifference.Id)
+                {
+                    RectTransform checkmark = levelObjFactory.CreateCheckmark(gameFieldRoot);
+                    checkmark.localPosition = ta.transform.localPosition;
                     Destroy(ta.gameObject);
+                }
             });
             touchableAreas.RemoveAll((ta) => { return ta.GetId() == command.foundedDifference.Id; });
 
@@ -84,7 +91,7 @@ namespace Vevidi.FindDiff.GameLogic
             gameEvents.Publish(new UpdateLevelUiCommand(newDiffValue));
             if (touchableAreas.Count == 0)
             {
-                lManager.EndLevel(levelInfo.Id);
+                levelManager.EndLevel(levelInfo.Id);
                 SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Win);
                 UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.GameEnded));
             }
@@ -96,9 +103,9 @@ namespace Vevidi.FindDiff.GameLogic
             var diffs = levelInfo.Differences;
             foreach (var diff in diffs)
             {
-                TouchableArea area = loFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, 0);
+                TouchableArea area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, 0);
                 touchableAreas.Add(area);
-                area = loFactory.CreateTouchableArea(gameFieldRoot, diff);
+                area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff);
                 touchableAreas.Add(area);
             }
             lvManager.Init(diffs.Count);
@@ -116,7 +123,7 @@ namespace Vevidi.FindDiff.GameLogic
 
         protected override void OnDestroy()
         {
-            backgroundClickArea.onClick.RemoveListener(OnMissTap);
+            backgroundClickArea.OnBackgroundClick -= OnMissTap;
             gameEvents.DeleteSubscriber<DiffFoundCommand>(OnDiffFound);
         }
     }
