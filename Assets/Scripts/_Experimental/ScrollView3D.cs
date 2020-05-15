@@ -72,7 +72,7 @@ namespace Vevidi.Experimental
             }
         }
 
-        private IEnumerator MoveTo(Transform objTrans, Vector3 position, Action callback = null, Action preCallback = null, float speed = 20f)
+        private IEnumerator MoveTo(Transform objTrans, Vector3 position, Action callback = null, Action preCallback = null, float speed = 30f)
         {
             float step = speed * Time.deltaTime;
             while(Vector3.Distance(objTrans.localPosition,position)>0.001f)
@@ -86,7 +86,7 @@ namespace Vevidi.Experimental
             callback?.Invoke();
         }
 
-        private IEnumerator RotateTo(Transform objTrans, Quaternion rotation, float speed = 90f)
+        private IEnumerator RotateTo(Transform objTrans, Quaternion rotation, float speed = 135f)
         {
             float step = speed * Time.deltaTime;
             while (Quaternion.Angle(objTrans.localRotation, rotation) > 0.1f)

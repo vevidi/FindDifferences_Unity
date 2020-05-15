@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5119945431191067942}
   - component: {fileID: 5119945431191067941}
   - component: {fileID: 5119945431191067940}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ScrollView3DPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}

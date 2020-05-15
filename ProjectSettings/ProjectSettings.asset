@@ -163,7 +163,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.vevidi.FindDifferences
+    Android: com.vevidi.FindDifferences_exp
   buildNumber: {}
   AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 19
