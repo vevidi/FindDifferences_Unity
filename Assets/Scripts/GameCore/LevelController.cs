@@ -7,6 +7,7 @@ using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.GameMediator.Commands;
 using Vevidi.FindDiff.GameModel;
 using Vevidi.FindDiff.GameUtils;
+using Vevidi.FindDiff.NetworkModel;
 using Vevidi.FindDiff.UI;
 
 namespace Vevidi.FindDiff.GameLogic
@@ -29,15 +30,17 @@ namespace Vevidi.FindDiff.GameLogic
         private List<RectTransform> foundedCheckmarks;
         private ClickableBackground backgroundClickArea;
         private RectTransform gameFieldImageTransform;
+        private List<DifferenceInfoModel> differences;
 
         private int gameFieldWidth;
         private int gameFieldHeight;
 
-        private int liveCount = 5;
+        private const int maxLives = 5;
+        private int liveCount = maxLives;
 
         private void UpdateSize()
         {
-            if(Utils.GetAspectRatio()>1.8f)
+            if (Utils.GetAspectRatio() > 1.8f)
             {
                 gameFieldImageTransform.localScale = Vector3.one * 0.85f;
                 gameFieldRoot.localScale = Vector3.one * 0.85f;
@@ -55,6 +58,7 @@ namespace Vevidi.FindDiff.GameLogic
             gameEvents.Subscribe<DiffFoundCommand>(OnDiffFound);
             gameEvents.Subscribe<NextLevelCommand>(GoToNextLevel);
             gameEvents.Subscribe<RestartLevelCommand>(RestartLevel);
+            gameEvents.Subscribe<ShowHintCommand>(ShowHint);
 
             touchableAreas = new List<TouchableArea>();
             foundedCheckmarks = new List<RectTransform>();
@@ -69,6 +73,14 @@ namespace Vevidi.FindDiff.GameLogic
             Debug.Log("Level controller -> Loaded level: " + levelInfo);
         }
 
+        private void RemoveOneLive()
+        {
+            --liveCount;
+            gameEvents.Publish(new UpdateLivesCountCommand(liveCount, maxLives));
+            if (liveCount == 0)
+                LoseGame();
+        }
+
         private void OnMissTap(PointerEventData data)
         {
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Wrong);
@@ -77,10 +89,7 @@ namespace Vevidi.FindDiff.GameLogic
                 return;
             MissTapCheckmark checkmark = levelObjFactory.CreateMissTapCheckmark(gameFieldRoot);
             checkmark.transform.localPosition = localCursor;
-            --liveCount;
-            gameEvents.Publish(new UpdateLivesCountCommand(liveCount));
-            if (liveCount == 0)
-                LoseGame();
+            RemoveOneLive();
         }
 
         private void OnDiffFound(DiffFoundCommand command)
@@ -98,9 +107,10 @@ namespace Vevidi.FindDiff.GameLogic
                 }
             });
             touchableAreas.RemoveAll((ta) => { return ta.GetId() == command.FoundedDifference.Id; });
+            differences.RemoveAll((diff) => diff.Id == command.FoundedDifference.Id);
 
             int diffCount = levelInfo.Differences.Count;
-            int newDiffValue = levelInfo.Differences.Count - touchableAreas.Count / 2;
+            int newDiffValue = diffCount - differences.Count;
             gameEvents.Publish(new UpdateDiffCountCommand(newDiffValue, diffCount));
             if (touchableAreas.Count == 0)
                 WinGame();
@@ -117,14 +127,14 @@ namespace Vevidi.FindDiff.GameLogic
         {
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Lose);
             UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.Lose));
-
         }
 
         private void InitLevel()
         {
             backgroundImage.overrideSprite = Utils.GetSpriteFromTex2D(levelInfo.LevelImage);
             var diffs = levelInfo.Differences;
-            foreach (var diff in diffs)
+            differences = diffs.Clone() as List<DifferenceInfoModel>;
+            foreach (var diff in differences)
             {
                 TouchableArea area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, 0);
                 touchableAreas.Add(area);
@@ -132,8 +142,8 @@ namespace Vevidi.FindDiff.GameLogic
                 touchableAreas.Add(area);
             }
             liveCount = 5;
-            gameEvents.Publish(new UpdateLivesCountCommand(liveCount));
-            gameEvents.Publish(new UpdateDiffCountCommand(diffs.Count, diffs.Count));
+            gameEvents.Publish(new UpdateLivesCountCommand(liveCount, maxLives));
+            gameEvents.Publish(new UpdateDiffCountCommand(0, differences.Count));
         }
 
         private void ClearLevel()
@@ -142,6 +152,7 @@ namespace Vevidi.FindDiff.GameLogic
             touchableAreas.Clear();
             foundedCheckmarks.ForEach((fc) => Destroy(fc.gameObject));
             foundedCheckmarks.Clear();
+            differences.Clear();
         }
 
         private void GoToNextLevel(NextLevelCommand command)
@@ -157,6 +168,16 @@ namespace Vevidi.FindDiff.GameLogic
         {
             ClearLevel();
             InitLevel();
+        }
+
+        private void ShowHint(ShowHintCommand command)
+        {
+            RemoveOneLive();
+            DifferenceInfoModel diffModel = differences[Random.Range(0, differences.Count)];
+            int targetDiffId = diffModel.Id;
+            List<TouchableArea> targets = touchableAreas.FindAll((ta) => ta.GetId() == targetDiffId);
+            foreach (TouchableArea ta in targets)
+                ta.PlayHintAnimation();
         }
 
         private void Start()
@@ -176,6 +197,7 @@ namespace Vevidi.FindDiff.GameLogic
             gameEvents.DeleteSubscriber<DiffFoundCommand>(OnDiffFound);
             gameEvents.DeleteSubscriber<NextLevelCommand>(GoToNextLevel);
             gameEvents.DeleteSubscriber<RestartLevelCommand>(RestartLevel);
+            gameEvents.DeleteSubscriber<ShowHintCommand>(ShowHint);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Vevidi.FindDiff.UI
         [SerializeField]
         private TextMeshProUGUI diffFoundText;
         [SerializeField]
-        private Image[] livesImages;
+        private Image livesImage;
         [SerializeField]
         private Button hintButton;
 #pragma warning restore 0649
@@ -26,6 +26,7 @@ namespace Vevidi.FindDiff.UI
         {
             gameEvents = GameManager.Instance.gameEventSystem;
             homeButton.onClick.AddListener(OnHomeButtonClick);
+            hintButton.onClick.AddListener(OnHintButtonClick);
             gameEvents.Subscribe<UpdateDiffCountCommand>(OnDifferenceFound);
             gameEvents.Subscribe<UpdateLivesCountCommand>(OnLivesCountChanged);
         }
@@ -33,6 +34,7 @@ namespace Vevidi.FindDiff.UI
         private void OnDestroy()
         {
             homeButton.onClick.RemoveListener(OnHomeButtonClick);
+            hintButton.onClick.RemoveListener(OnHintButtonClick);
             gameEvents.DeleteSubscriber<UpdateDiffCountCommand>(OnDifferenceFound);
             gameEvents.DeleteSubscriber<UpdateLivesCountCommand>(OnLivesCountChanged);
         }
@@ -47,12 +49,19 @@ namespace Vevidi.FindDiff.UI
         {
             // TODO: add some stuff here
             Debug.Log("Lives count -> " + command.LivesCount);
+            livesImage.fillAmount = 1f * command.LivesCount / command.MaxLives;
         }
 
         private void OnHomeButtonClick()
         {
             SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Click);
             SceneManager.LoadScene(GameVariables.MainMenuScene);
+        }
+
+        private void OnHintButtonClick()
+        {
+            SoundsManager.Instance.PlaySound(SoundsManager.eSoundType.Click);
+            gameEvents.Publish(new ShowHintCommand());
         }
     }
 }

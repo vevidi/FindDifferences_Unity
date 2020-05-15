@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Vevidi.FindDiff.NetworkModel
 {
     [Serializable]
-    public class DifferenceInfoModel
+    public class DifferenceInfoModel : ICloneable
     {
         [SerializeField]
         private int id;
@@ -27,6 +27,11 @@ namespace Vevidi.FindDiff.NetworkModel
         public float Y { get => y; }
         public float Radius { get => r; }
         public int Id { get => id; }
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
 
         public override string ToString()
         {

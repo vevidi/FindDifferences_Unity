@@ -16,10 +16,12 @@
     public class UpdateLivesCountCommand : ICommand
     {
         public int LivesCount { get; private set; }
+        public int MaxLives { get; private set; }
 
-        public UpdateLivesCountCommand(int livesCount)
+        public UpdateLivesCountCommand(int livesCount, int maxLives)
         {
             LivesCount = livesCount;
+            MaxLives = maxLives;
         }
     }
 }

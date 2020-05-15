@@ -10,6 +10,7 @@ namespace Vevidi.FindDiff.GameLogic
     {
         private DifferenceInfoModel model;
         private RectTransform rectTransform;
+        private ParticleSystem wavesParticles;
         private float radius = 50f;
 
         public void Init(DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
@@ -29,6 +30,14 @@ namespace Vevidi.FindDiff.GameLogic
         private void Awake()
         {
             rectTransform = GetComponent<RectTransform>();
+            wavesParticles = GetComponentInChildren<ParticleSystem>();
+        }
+
+        public void PlayHintAnimation()
+        {
+            if (wavesParticles.isPlaying)
+                wavesParticles.Stop();
+            wavesParticles.Play();
         }
 
         private void OnClick()
