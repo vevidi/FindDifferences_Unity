@@ -1,1 +1,45 @@
 # FindDifferences_Unity
+
+JSON data example
+{
+  "version": 1,
+  "levels": [
+    {
+      "id": 1,
+      "img": "test1.jpg",
+      "differences": [
+        {
+          "id": 1,
+          "x": 1,
+          "y": 1,
+          "r": 1
+        },
+        {
+          "id": 2,
+          "x": 2,
+          "y": 2,
+          "r": 2
+        },
+        {
+          "id": 3,
+          "x": 3,
+          "y": 3,
+          "r": 3
+        }
+      ]
+    },
+    ....
+    ]
+}
+
+version - current config version (if version changes - app reloads data, images, etc)
+levels - array of level configs
+	id - level ID
+	img - level background image
+	differences - array of difference points configs
+		id - point ID
+		x - X position on background
+		y - Y position on background
+		r - tappable area radius
+
+X and Y positions are from (0,0) - bottom left corner, to (800,395) - top right corner.
