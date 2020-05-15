@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Vevidi.FindDiff.GameLogic;
+using Vevidi.FindDiff.GameMediator;
 using static Vevidi.FindDiff.GameLogic.SoundsManager;
 using static Vevidi.FindDiff.UI.UI_WindowsManager;
 
@@ -11,8 +12,14 @@ namespace Vevidi.FindDiff.UI
         protected bool isBackBtnClosable = false;
         protected eWindowType WType;
         protected Action onCloseCallback;
+        protected Mediator gameEvents;
 
         public bool IsBackBtnClosable { get { return isBackBtnClosable; } }
+
+        protected virtual void Awake()
+        {
+            gameEvents = GameManager.Instance.gameEventSystem;
+        }
 
         public virtual void Init(UI_WindowConfig cfg)
         {

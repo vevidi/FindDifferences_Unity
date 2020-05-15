@@ -12,12 +12,11 @@ namespace Vevidi.FindDiff.UI
         [SerializeField]
         private Button backToMenuButton;
 #pragma warning restore 0649
-        protected Mediator gameEvents;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             backToMenuButton.onClick.AddListener(OnBackToMenuButtonClick);
-            gameEvents = GameManager.Instance.gameEventSystem;
         }
 
         protected virtual void OnDestroy()

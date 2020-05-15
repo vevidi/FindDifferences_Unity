@@ -18,7 +18,8 @@ namespace Vevidi.FindDiff.UI
         public enum eWindowType
         {
             Win,
-            Lose
+            Lose,
+            Error
         }
 
         public static UI_WindowsManager Instance { get; private set; }

@@ -4,7 +4,7 @@ using static Vevidi.FindDiff.UI.UI_WindowsManager;
 
 namespace Vevidi.FindDiff.UI
 {
-    public class UI_WindowConfigBuilder : MonoBehaviour
+    public class UI_WindowConfigBuilder
     {
         private UI_WindowConfig currConfig;
 

@@ -22,22 +22,39 @@ namespace Vevidi.FindDiff.UI
         private void Awake()
         {
             gameEvents = GameManager.Instance.gameEventSystem;
-            gameEvents.Subscribe<LoadingStatusCommand>(OnLoadingStatusChange);
+            gameEvents.Subscribe<LoadingStatusCommand>(LoadingStatusChange);
+            gameEvents.Subscribe<StartLoadAgainCommand>(TryLoadAgain);
         }
 
-        private async void Start()
+        private async void StartLoad()
         {
             bool result = await NetworkManager.Instance.CheckInternetConnection(StartDataLoad);
             if (!result)
             {
-                gameEvents.Publish(new LoadingStatusCommand(eLoadingStatus.Error, "No internet connction!"));
+                gameEvents.Publish(new LoadingStatusCommand(eLoadingStatus.Error, "No internet connection!"));
             }
         }
+
+        private void Start()
+        {
+            StartLoad();
+        }
                
-        private void OnLoadingStatusChange(LoadingStatusCommand command)
+        private void LoadingStatusChange(LoadingStatusCommand command)
         {
             string prefix = command.Status == eLoadingStatus.Ok ? "OK -> " : "ERROR -> ";
             loadingStatus.text = "Status: " + prefix + " " + command.Message;
+            if(command.Status == eLoadingStatus.Error)
+            {
+                UI_WindowConfigBuilder wConfig = new UI_WindowConfigBuilder(UI_WindowsManager.eWindowType.Error);
+                wConfig.AddData("message", command.Message);
+                UI_WindowsManager.Instance.ShowWindow(wConfig.Build());
+            }
+        }
+
+        private void TryLoadAgain(StartLoadAgainCommand command)
+        {
+            StartLoad();
         }
 
         private void StartDataLoad()
@@ -58,7 +75,8 @@ namespace Vevidi.FindDiff.UI
 
         private void OnDestroy()
         {
-            gameEvents.DeleteSubscriber<LoadingStatusCommand>(OnLoadingStatusChange);
+            gameEvents.DeleteSubscriber<LoadingStatusCommand>(LoadingStatusChange);
+            gameEvents.DeleteSubscriber<StartLoadAgainCommand>(TryLoadAgain);
         }
     }
 }

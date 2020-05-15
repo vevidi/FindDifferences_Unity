@@ -44,7 +44,7 @@ namespace Vevidi.FindDiff.Network
         {
             var sManager = GameManager.Instance.SaveManager;
             var gameInfo = await LoadGameInfo();
-            Debug.Log(gameInfo + "\n\n" + sManager.SaveLoaded + " " + sManager.SaveVersion + " " + gameInfo.Version);
+
             if (gameInfo == null)
                 onError?.Invoke("Info not loaded!");
             else if (sManager.SaveLoaded && sManager.SaveVersion == gameInfo.Version)
