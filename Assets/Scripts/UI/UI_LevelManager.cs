@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameMediator;
+using Vevidi.FindDiff.GameMediator.Commands;
 
 namespace Vevidi.FindDiff.UI
 {

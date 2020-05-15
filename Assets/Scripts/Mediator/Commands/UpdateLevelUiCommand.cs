@@ -1,4 +1,4 @@
-﻿namespace Vevidi.FindDiff.GameMediator
+﻿namespace Vevidi.FindDiff.GameMediator.Commands
 {
     public class UpdateLevelUiCommand : ICommand
     {

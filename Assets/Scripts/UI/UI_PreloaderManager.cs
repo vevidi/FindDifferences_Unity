@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.GameMediator;
+using Vevidi.FindDiff.GameMediator.Commands;
 using Vevidi.FindDiff.Network;
 using Vevidi.FindDiff.NetworkModel;
-using eLoadingStatus = Vevidi.FindDiff.GameMediator.LoadingStatusCommand.eLoadingStatus;
+using eLoadingStatus = Vevidi.FindDiff.GameMediator.Commands.LoadingStatusCommand.eLoadingStatus;
 
 namespace Vevidi.FindDiff.UI
 {

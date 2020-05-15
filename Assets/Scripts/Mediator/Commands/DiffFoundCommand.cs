@@ -1,7 +1,7 @@
 ﻿using Vevidi.FindDiff.GameLogic;
 using Vevidi.FindDiff.NetworkModel;
 
-namespace Vevidi.FindDiff.GameMediator
+namespace Vevidi.FindDiff.GameMediator.Commands
 {
     public class DiffFoundCommand : ICommand
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vevidi.FindDiff.GameMediator.Commands;
 
 namespace Vevidi.FindDiff.GameMediator
 {
