@@ -12,9 +12,13 @@ namespace Vevidi.FindDiff.UI
     {
 #pragma warning disable 0649
         [SerializeField]
-        public Button homeButton;
+        private Button homeButton;
         [SerializeField]
-        public TextMeshProUGUI diffFoundText;
+        private TextMeshProUGUI diffFoundText;
+        [SerializeField]
+        private Image[] livesImages;
+        [SerializeField]
+        private Button hintButton;
 #pragma warning restore 0649
         private Mediator gameEvents;
 
