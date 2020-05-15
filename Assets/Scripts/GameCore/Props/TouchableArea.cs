@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using Vevidi.FindDiff.GameMediator;
+using Vevidi.FindDiff.GameMediator.Commands;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
