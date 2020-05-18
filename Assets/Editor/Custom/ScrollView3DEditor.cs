@@ -8,34 +8,23 @@ namespace Vevidi.CustomGameEditor
     [CanEditMultipleObjects]
     public class ScrollView3DEditor : Editor
     {
-        private SerializedProperty rightStartPos;
-        private SerializedProperty leftStartPos;
-
         private ScrollView3D scrollView;
 
         void OnEnable()
         {
-            rightStartPos = serializedObject.FindProperty("rightStartPos");
-            leftStartPos = serializedObject.FindProperty("leftStartPos");
-
             scrollView = target as ScrollView3D;
-            scrollView.ArrangeItems(scrollView.currSelectedItem, true);
+            scrollView.ArrangeItems(scrollView.CurrentItem, true);
         }
 
         public override void OnInspectorGUI()
         {
             scrollView = target as ScrollView3D;
-
-            serializedObject.Update();
-            EditorGUILayout.PropertyField(rightStartPos);
-            EditorGUILayout.PropertyField(leftStartPos);
-
-            scrollView.currSelectedItem = EditorGUILayout.IntField("Selected item", scrollView.currSelectedItem);
+            scrollView.CurrentItem = EditorGUILayout.IntField("Selected item", scrollView.CurrentItem);
+            DrawDefaultInspector();
 
             if (Application.isEditor)
             {
-                serializedObject.ApplyModifiedProperties();
-                scrollView.ArrangeItems(scrollView.currSelectedItem, true);
+                scrollView.ArrangeItems(scrollView.CurrentItem, true);
             }
             if (GUI.changed)
             {

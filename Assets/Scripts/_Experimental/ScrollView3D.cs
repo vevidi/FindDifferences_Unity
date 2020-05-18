@@ -8,9 +8,10 @@ namespace Vevidi.Experimental
 {
     public class ScrollView3D : MonoBehaviour
     {
-        public Vector3 rightStartPos = new Vector3(12.7f, -1.3f, 10.7f);
-        public Vector3 leftStartPos = new Vector3(-12.7f, -1.3f, 10.7f);
-        public int currSelectedItem = 0;
+        [SerializeField]
+        private Vector3 rightStartPos = new Vector3(12.7f, -1.3f, 10.7f);
+        [SerializeField]
+        private Vector3 leftStartPos = new Vector3(-12.7f, -1.3f, 10.7f);
 
         private readonly Vector3 centerPos = new Vector3(0, -1.3f, 2.8f);
         private readonly Quaternion centerRotation = Quaternion.Euler(new Vector3(-270, -90, 90));
@@ -30,6 +31,9 @@ namespace Vevidi.Experimental
 
         private int rightItemsCount = 0;
         private int leftItemsCount = 0;
+        private int currentItem = 0;
+
+        public int CurrentItem { get => currentItem; set => currentItem = value; }
 
         private void Awake()
         {
@@ -65,15 +69,15 @@ namespace Vevidi.Experimental
                 Debug.LogWarning("ARRANGE " + selectedItemId + " " + withCenterUpdate);
 
                 //TODO: refactor this
-                currSelectedItem = selectedItemId;
+                currentItem = selectedItemId;
 
                 if (withCenterUpdate)
                 {
-                    items[currSelectedItem].localPosition = centerPos;
-                    items[currSelectedItem].localRotation = centerRotation;
+                    items[currentItem].localPosition = centerPos;
+                    items[currentItem].localRotation = centerRotation;
                 }
 
-                leftItemsCount = currSelectedItem - 1;
+                leftItemsCount = currentItem - 1;
                 if (leftItemsCount > 0)
                 {
                     Vector3 currOffset = maxPackSizeLeft / leftItemsCount;
@@ -86,15 +90,15 @@ namespace Vevidi.Experimental
                     }
                 }
 
-                rightItemsCount = items.Count - currSelectedItem;
+                rightItemsCount = items.Count - currentItem;
                 if (rightItemsCount > 0)
                 {
                     Vector3 currOffset = maxPackSizeRight / rightItemsCount;
                     if (currOffset.IsMore(posOffsetRight))
                         currOffset = posOffsetRight;
-                    for (int i = currSelectedItem + 1; i < items.Count; ++i)
+                    for (int i = currentItem + 1; i < items.Count; ++i)
                     {
-                        items[i].localPosition = rightStartPos + currOffset * (currSelectedItem + 1 - i);
+                        items[i].localPosition = rightStartPos + currOffset * (currentItem + 1 - i);
                         items[i].localRotation = rightRotation;
                     }
                 }
@@ -133,39 +137,39 @@ namespace Vevidi.Experimental
         private void PreAnimationEnded()
         {
             preAnimationNeeded = false;
-            ArrangeItems(currSelectedItem, false);
+            ArrangeItems(currentItem, false);
         }
 
         public IEnumerator SwipeRight()
         {
-            if (currSelectedItem > 0 && !isBlocked)
+            if (currentItem > 0 && !isBlocked)
             {
-                Debug.Log("DIST: " + Vector3.Distance(items[currSelectedItem - 1].localPosition, centerPos));
+                Debug.Log("DIST: " + Vector3.Distance(items[currentItem - 1].localPosition, centerPos));
 
                 isBlocked = true;
                 preAnimationNeeded = true;
-                StartCoroutine(MoveTo(items[currSelectedItem - 1], centerPos));
-                StartCoroutine(RotateTo(items[currSelectedItem - 1], centerRotation));
-                StartCoroutine(MoveTo(items[currSelectedItem], rightStartPos, AnimationEnded, PreAnimationEnded));
-                StartCoroutine(RotateTo(items[currSelectedItem], rightRotation));
-                --currSelectedItem;
+                StartCoroutine(MoveTo(items[currentItem - 1], centerPos));
+                StartCoroutine(RotateTo(items[currentItem - 1], centerRotation));
+                StartCoroutine(MoveTo(items[currentItem], rightStartPos, AnimationEnded, PreAnimationEnded));
+                StartCoroutine(RotateTo(items[currentItem], rightRotation));
+                --currentItem;
             }
             yield return null;
         }
 
         public IEnumerator SwipeLeft()
         {
-            if (currSelectedItem < items.Count - 1 && !isBlocked)
+            if (currentItem < items.Count - 1 && !isBlocked)
             {
-                Debug.Log("DIST: " + Vector3.Distance(items[currSelectedItem + 1].localPosition, centerPos));
+                Debug.Log("DIST: " + Vector3.Distance(items[currentItem + 1].localPosition, centerPos));
 
                 isBlocked = true;
                 preAnimationNeeded = true;
-                StartCoroutine(MoveTo(items[currSelectedItem + 1], centerPos));
-                StartCoroutine(RotateTo(items[currSelectedItem + 1], centerRotation));
-                StartCoroutine(MoveTo(items[currSelectedItem], leftStartPos, AnimationEnded, PreAnimationEnded));
-                StartCoroutine(RotateTo(items[currSelectedItem], leftRotation));
-                ++currSelectedItem;
+                StartCoroutine(MoveTo(items[currentItem + 1], centerPos));
+                StartCoroutine(RotateTo(items[currentItem + 1], centerRotation));
+                StartCoroutine(MoveTo(items[currentItem], leftStartPos, AnimationEnded, PreAnimationEnded));
+                StartCoroutine(RotateTo(items[currentItem], leftRotation));
+                ++currentItem;
             }
             yield return null;
         }
