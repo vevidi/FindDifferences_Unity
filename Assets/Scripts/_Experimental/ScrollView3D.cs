@@ -2,19 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.Experimental
 {
     public class ScrollView3D : MonoBehaviour
     {
+        public Vector3 rightStartPos = new Vector3(12.7f, -1.3f, 10.7f);
+        public Vector3 leftStartPos = new Vector3(-12.7f, -1.3f, 10.7f);
+        public int currSelectedItem = 0;
+
         private readonly Vector3 centerPos = new Vector3(0, -1.3f, 2.8f);
-        private readonly Vector3 rightStartPos = new Vector3(14, -1.3f, 11.45f);
-        private readonly Vector3 leftStartPos = new Vector3(-14, -1.3f, 11.45f);
         private readonly Quaternion centerRotation = Quaternion.Euler(new Vector3(-270, -90, 90));
         private readonly Quaternion rightRotation = Quaternion.Euler(new Vector3(-270, -30, 90));
         private readonly Quaternion leftRotation = Quaternion.Euler(new Vector3(-270, 30, -90));
         private readonly Vector3 posOffsetRight = new Vector3(-1.15f, 0, -0.65f);
         private readonly Vector3 posOffsetLeft = new Vector3(-1.15f, 0, 0.65f);
+        private readonly Vector3 maxPackSizeRight = new Vector3(-1.15f, 0, -0.65f) * 4;
+        private readonly Vector3 maxPackSizeLeft = new Vector3(-1.15f, 0, 0.65f) * 4;
 
         public Transform itemPrefab;
 
@@ -23,7 +28,8 @@ namespace Vevidi.Experimental
         private bool isBlocked = false;
         private bool preAnimationNeeded = false;
 
-        private int currSelectedItem = 0;
+        private int rightItemsCount = 0;
+        private int leftItemsCount = 0;
 
         private void Awake()
         {
@@ -51,24 +57,46 @@ namespace Vevidi.Experimental
             ArrangeItems(0, true);
         }
 
-        private void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false)
+        /*private*/ public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false)
         {
-            if (items.Count > 0)
+            if (items!=null && items.Count > 0 && !isBlocked)
             {
+
+                Debug.LogWarning("ARRANGE " + selectedItemId + " " + withCenterUpdate);
+
                 //TODO: refactor this
                 currSelectedItem = selectedItemId;
 
                 if (withCenterUpdate)
+                {
                     items[currSelectedItem].localPosition = centerPos;
-                for (int i = currSelectedItem - 1; i >= 0; --i)
-                {
-                    items[i].localPosition = leftStartPos + posOffsetLeft * (currSelectedItem - 1 - i);
-                    items[i].localRotation = leftRotation;
+                    items[currSelectedItem].localRotation = centerRotation;
                 }
-                for (int i = currSelectedItem + 1; i < items.Count; ++i)
+
+                leftItemsCount = currSelectedItem - 1;
+                if (leftItemsCount > 0)
                 {
-                    items[i].localPosition = rightStartPos + posOffsetRight * (currSelectedItem + 1 - i);
-                    items[i].localRotation = rightRotation;
+                    Vector3 currOffset = maxPackSizeLeft / leftItemsCount;
+                    if (currOffset.IsMore(posOffsetLeft))
+                        currOffset = posOffsetLeft;
+                    for (int i = leftItemsCount; i >= 0; --i)
+                    {
+                        items[i].localPosition = leftStartPos + currOffset * (leftItemsCount - i);
+                        items[i].localRotation = leftRotation;
+                    }
+                }
+
+                rightItemsCount = items.Count - currSelectedItem;
+                if (rightItemsCount > 0)
+                {
+                    Vector3 currOffset = maxPackSizeRight / rightItemsCount;
+                    if (currOffset.IsMore(posOffsetRight))
+                        currOffset = posOffsetRight;
+                    for (int i = currSelectedItem + 1; i < items.Count; ++i)
+                    {
+                        items[i].localPosition = rightStartPos + currOffset * (currSelectedItem + 1 - i);
+                        items[i].localRotation = rightRotation;
+                    }
                 }
             }
         }
@@ -104,7 +132,6 @@ namespace Vevidi.Experimental
 
         private void PreAnimationEnded()
         {
-            //            Debug.LogWarning("Pre ended");
             preAnimationNeeded = false;
             ArrangeItems(currSelectedItem, false);
         }
