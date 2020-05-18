@@ -20,6 +20,8 @@ CGPROGRAM
 #pragma debug
 #pragma vertex vert
 #pragma fragment frag 
+#include "UnityCG.cginc"
+
 #ifndef SHADER_API_D3D11
 
     #pragma target 3.0
@@ -31,6 +33,7 @@ CGPROGRAM
 #endif
 
             sampler2D _GrabTexture : register(s0);
+			float4 _GrabTexture_TexelSize;
             float _blurSizeXY;
 
 struct data {
@@ -51,21 +54,33 @@ struct v2f {
 
 };
 
- 
-
 v2f vert(data i){
 
     v2f o;
 
-    o.position = UnityObjectToClipPos(i.vertex);
+//	if (_GrabTexture_TexelSize.y < 0)
+//		i.vertex.y = 1-i.vertex.y;
 
-    o.screenPos = o.position;
+    o.position = /*ComputeGrabScreenPos(i.vertex);*/ UnityObjectToClipPos(i.vertex);
+
+//    o.screenPos = ComputeScreenPos(o.position);
+	o.screenPos =  o.position;
+
+//	#if UNITY_UV_STARTS_AT_TOP
+//	if (_GrabTexture_TexelSize.y < 0)
+//			o.screenPos.y = 1-o.screenPos.y;
+//	#endif
+
+ //   if (_ProjectionParams.y < 0)
+//		o.screenPos.y = 1-o.screenPos.y;
+
+//	#if UNITY_UV_STARTS_AT_TOP
+//  o.screenPos.y = -o.screenPos.y;
+//	#endif
 
     return o;
 
 }
-
- 
 
 half4 frag( v2f i ) : COLOR
 
@@ -74,9 +89,16 @@ half4 frag( v2f i ) : COLOR
     float2 screenPos = i.screenPos.xy / i.screenPos.w;
 	float depth= _blurSizeXY*0.0005;
 
+//	#if UNITY_UV_STARTS_AT_TOP
+//	depth = -depth;
+//	#endif
+
     screenPos.x = (screenPos.x + 1) * 0.5;
 
-    screenPos.y = 1-(screenPos.y + 1) * 0.5;
+	if (_GrabTexture_TexelSize.y > 0)
+		screenPos.y = (screenPos.y + 1) * 0.5;
+	else
+		screenPos.y = 1-(screenPos.y + 1) * 0.5;
 
     half4 sum = half4(0.0h,0.0h,0.0h,0.0h);   
     sum += tex2D( _GrabTexture, float2(screenPos.x-5.0 * depth, screenPos.y+5.0 * depth)) * 0.025;    

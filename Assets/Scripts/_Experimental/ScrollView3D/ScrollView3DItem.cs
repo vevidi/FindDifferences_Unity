@@ -45,16 +45,21 @@ namespace Vevidi.Experimental
             buttonImageTexture.ReadPixels(new Rect(0, 0, width / 2, height), 0, 0);
             buttonImageTexture.Apply(false);
 
-            thisRenderer.sharedMaterial = new Material(thisRenderer.sharedMaterial);
-            thisRenderer.sharedMaterial.mainTexture = buttonImageTexture;
-            imageWithGradient.sharedMaterial.mainTexture = buttonImageTexture;
+            thisRenderer.sharedMaterial = new Material(thisRenderer.sharedMaterial)
+            {
+                mainTexture = buttonImageTexture
+            };
+            imageWithGradient.sharedMaterial = new Material(imageWithGradient.sharedMaterial)
+            {
+                mainTexture = buttonImageTexture
+            };
 
             if (levelDescription.IsEnded)
             {
                 levelPassedCheckmark.SetActive(true);
                 levelPassedGradient.SetActive(true);
             }
-            else if (!levelDescription.IsOpened)
+            else if (!levelDescription.IsOpened) // || true)
             {
                 blurredImage.SetActive(true);
                 //levelButton.enabled = false;
