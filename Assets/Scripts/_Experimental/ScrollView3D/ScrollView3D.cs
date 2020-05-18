@@ -110,7 +110,7 @@ namespace Vevidi.Experimental
             float step = moveSpeed * Time.fixedDeltaTime;
             while (Vector3.Distance(objTrans.localPosition, position) > 0.001f)
             {
-                if (Vector3.Distance(objTrans.localPosition, position) < 0.5f && preAnimationNeeded)
+                if (Vector3.Distance(objTrans.localPosition, position) < 1f && preAnimationNeeded)
                     preCallback?.Invoke();
 
                 objTrans.localPosition = Vector3.MoveTowards(objTrans.localPosition, position, step);
