@@ -36,9 +36,8 @@ namespace Vevidi.Experimental
 
         private int rightItemsCount = 0;
         private int leftItemsCount = 0;
-        private int currentItem = 0;
 
-        public int CurrentItem { get => currentItem; set => currentItem = value; }
+        public int CurrentItem { get; set; }
 
         private void Awake()
         {
@@ -70,15 +69,15 @@ namespace Vevidi.Experimental
         {
             if (items!=null && items.Count > 0 && (!isBlocked||ignoreBlocked))
             {
-                currentItem = selectedItemId;
+                CurrentItem = selectedItemId;
 
                 if (withCenterUpdate)
                 {
-                    items[currentItem].localPosition = centerPos;
-                    items[currentItem].localRotation = centerRotation;
+                    items[CurrentItem].localPosition = centerPos;
+                    items[CurrentItem].localRotation = centerRotation;
                 }
 
-                leftItemsCount = currentItem - 1;
+                leftItemsCount = CurrentItem - 1;
                 if (leftItemsCount > 0)
                 {
                     Vector3 currOffset = maxPackSizeLeft / leftItemsCount;
@@ -91,15 +90,15 @@ namespace Vevidi.Experimental
                     }
                 }
 
-                rightItemsCount = items.Count - currentItem;
+                rightItemsCount = items.Count - CurrentItem;
                 if (rightItemsCount > 0)
                 {
                     Vector3 currOffset = maxPackSizeRight / rightItemsCount;
                     if (currOffset.IsMore(posOffsetRight))
                         currOffset = posOffsetRight;
-                    for (int i = currentItem + 1; i < items.Count; ++i)
+                    for (int i = CurrentItem + 1; i < items.Count; ++i)
                     {
-                        items[i].localPosition = rightStartPos + currOffset * (currentItem + 1 - i);
+                        items[i].localPosition = rightStartPos + currOffset * (CurrentItem + 1 - i);
                         items[i].localRotation = rightRotation;
                     }
                 }
@@ -138,34 +137,34 @@ namespace Vevidi.Experimental
         private void PreAnimationEnded()
         {
             preAnimationNeeded = false;
-            ArrangeItems(currentItem, false, true);
+            ArrangeItems(CurrentItem, false, true);
         }
 
         public void SwipeRight()
         {
-            if (currentItem > 0 && !isBlocked)
+            if (CurrentItem > 0 && !isBlocked)
             {
                 isBlocked = true;
                 preAnimationNeeded = true;
-                StartCoroutine(MoveTo(items[currentItem - 1], centerPos));
-                StartCoroutine(RotateTo(items[currentItem - 1], centerRotation));
-                StartCoroutine(MoveTo(items[currentItem], rightStartPos, AnimationEnded, PreAnimationEnded));
-                StartCoroutine(RotateTo(items[currentItem], rightRotation));
-                --currentItem;
+                StartCoroutine(MoveTo(items[CurrentItem - 1], centerPos));
+                StartCoroutine(RotateTo(items[CurrentItem - 1], centerRotation));
+                StartCoroutine(MoveTo(items[CurrentItem], rightStartPos, AnimationEnded, PreAnimationEnded));
+                StartCoroutine(RotateTo(items[CurrentItem], rightRotation));
+                --CurrentItem;
             }
         }
 
         public void SwipeLeft()
         {
-            if (currentItem < items.Count - 1 && !isBlocked)
+            if (CurrentItem < items.Count - 1 && !isBlocked)
             {
                 isBlocked = true;
                 preAnimationNeeded = true;
-                StartCoroutine(MoveTo(items[currentItem + 1], centerPos));
-                StartCoroutine(RotateTo(items[currentItem + 1], centerRotation));
-                StartCoroutine(MoveTo(items[currentItem], leftStartPos, AnimationEnded, PreAnimationEnded));
-                StartCoroutine(RotateTo(items[currentItem], leftRotation));
-                ++currentItem;
+                StartCoroutine(MoveTo(items[CurrentItem + 1], centerPos));
+                StartCoroutine(RotateTo(items[CurrentItem + 1], centerRotation));
+                StartCoroutine(MoveTo(items[CurrentItem], leftStartPos, AnimationEnded, PreAnimationEnded));
+                StartCoroutine(RotateTo(items[CurrentItem], leftRotation));
+                ++CurrentItem;
             }
         }
     }
