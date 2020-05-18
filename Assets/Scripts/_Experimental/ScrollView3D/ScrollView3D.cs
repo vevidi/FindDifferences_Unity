@@ -13,6 +13,10 @@ namespace Vevidi.Experimental
         [SerializeField]
         private Vector3 leftStartPos = new Vector3(-12.7f, -1.3f, 10.7f);
         [SerializeField]
+        private float moveSpeed = 60f;
+        [SerializeField]
+        private float rotationSpeed = 270f;
+        [SerializeField]
         private List<Transform> items;
 
         private readonly Vector3 centerPos = new Vector3(0, -1.3f, 2.8f);
@@ -62,14 +66,10 @@ namespace Vevidi.Experimental
             ArrangeItems(0, true);
         }
 
-        /*private*/ public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false, bool ignoreBlocked = false)
+        public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false, bool ignoreBlocked = false)
         {
             if (items!=null && items.Count > 0 && (!isBlocked||ignoreBlocked))
             {
-
-                Debug.LogWarning("ARRANGE " + selectedItemId + " " + withCenterUpdate);
-
-                //TODO: refactor this
                 currentItem = selectedItemId;
 
                 if (withCenterUpdate)
@@ -106,27 +106,27 @@ namespace Vevidi.Experimental
             }
         }
 
-        private IEnumerator MoveTo(Transform objTrans, Vector3 position, Action callback = null, Action preCallback = null, float speed = 30f)
+        private IEnumerator MoveTo(Transform objTrans, Vector3 position, Action callback = null, Action preCallback = null)
         {
-            float step = speed * Time.deltaTime;
+            float step = moveSpeed * Time.fixedDeltaTime;
             while (Vector3.Distance(objTrans.localPosition, position) > 0.001f)
             {
-                if (Vector3.Distance(objTrans.localPosition, position) < 1f && preAnimationNeeded)
+                if (Vector3.Distance(objTrans.localPosition, position) < 0.5f && preAnimationNeeded)
                     preCallback?.Invoke();
 
                 objTrans.localPosition = Vector3.MoveTowards(objTrans.localPosition, position, step);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
             callback?.Invoke();
         }
 
-        private IEnumerator RotateTo(Transform objTrans, Quaternion rotation, float speed = 135f)
+        private IEnumerator RotateTo(Transform objTrans, Quaternion rotation)
         {
-            float step = speed * Time.deltaTime;
+            float step = rotationSpeed * Time.fixedDeltaTime;
             while (Quaternion.Angle(objTrans.localRotation, rotation) > 0.1f)
             {
                 objTrans.localRotation = Quaternion.RotateTowards(objTrans.localRotation, rotation, step);
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
 
@@ -145,8 +145,6 @@ namespace Vevidi.Experimental
         {
             if (currentItem > 0 && !isBlocked)
             {
-                Debug.Log("DIST: " + Vector3.Distance(items[currentItem - 1].localPosition, centerPos));
-
                 isBlocked = true;
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[currentItem - 1], centerPos));
@@ -155,15 +153,12 @@ namespace Vevidi.Experimental
                 StartCoroutine(RotateTo(items[currentItem], rightRotation));
                 --currentItem;
             }
- //           yield return null;
         }
 
         public void SwipeLeft()
         {
             if (currentItem < items.Count - 1 && !isBlocked)
             {
-                Debug.Log("DIST: " + Vector3.Distance(items[currentItem + 1].localPosition, centerPos));
-
                 isBlocked = true;
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[currentItem + 1], centerPos));
@@ -172,19 +167,6 @@ namespace Vevidi.Experimental
                 StartCoroutine(RotateTo(items[currentItem], leftRotation));
                 ++currentItem;
             }
-//            yield return null;
         }
-
-        //private void OnGUI()
-        //{
-        //    if (GUI.Button(new Rect(250, 100, 100, 100), "Right"))
-        //    {
-        //        StartCoroutine(SwipeRight());
-        //    }
-        //    if (GUI.Button(new Rect(100, 100, 100, 100), "Left"))
-        //    {
-        //        StartCoroutine(SwipeLeft());
-        //    }
-        //}
     }
 }
