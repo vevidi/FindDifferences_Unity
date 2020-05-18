@@ -6,12 +6,14 @@ using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.Experimental
 {
-    public class ScrollView3D : MonoBehaviour
+    public class ScrollView3D : MonoBehaviour, ISwipable
     {
         [SerializeField]
         private Vector3 rightStartPos = new Vector3(12.7f, -1.3f, 10.7f);
         [SerializeField]
         private Vector3 leftStartPos = new Vector3(-12.7f, -1.3f, 10.7f);
+        [SerializeField]
+        private List<Transform> items;
 
         private readonly Vector3 centerPos = new Vector3(0, -1.3f, 2.8f);
         private readonly Quaternion centerRotation = Quaternion.Euler(new Vector3(-270, -90, 90));
@@ -25,7 +27,6 @@ namespace Vevidi.Experimental
         public Transform itemPrefab;
 
         private Transform thisTransform;
-        private List<Transform> items;
         private bool isBlocked = false;
         private bool preAnimationNeeded = false;
 
@@ -61,9 +62,9 @@ namespace Vevidi.Experimental
             ArrangeItems(0, true);
         }
 
-        /*private*/ public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false)
+        /*private*/ public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false, bool ignoreBlocked = false)
         {
-            if (items!=null && items.Count > 0 && !isBlocked)
+            if (items!=null && items.Count > 0 && (!isBlocked||ignoreBlocked))
             {
 
                 Debug.LogWarning("ARRANGE " + selectedItemId + " " + withCenterUpdate);
@@ -137,10 +138,10 @@ namespace Vevidi.Experimental
         private void PreAnimationEnded()
         {
             preAnimationNeeded = false;
-            ArrangeItems(currentItem, false);
+            ArrangeItems(currentItem, false, true);
         }
 
-        public IEnumerator SwipeRight()
+        public void SwipeRight()
         {
             if (currentItem > 0 && !isBlocked)
             {
@@ -154,10 +155,10 @@ namespace Vevidi.Experimental
                 StartCoroutine(RotateTo(items[currentItem], rightRotation));
                 --currentItem;
             }
-            yield return null;
+ //           yield return null;
         }
 
-        public IEnumerator SwipeLeft()
+        public void SwipeLeft()
         {
             if (currentItem < items.Count - 1 && !isBlocked)
             {
@@ -171,19 +172,19 @@ namespace Vevidi.Experimental
                 StartCoroutine(RotateTo(items[currentItem], leftRotation));
                 ++currentItem;
             }
-            yield return null;
+//            yield return null;
         }
 
-        private void OnGUI()
-        {
-            if (GUI.Button(new Rect(250, 100, 100, 100), "Right"))
-            {
-                StartCoroutine(SwipeRight());
-            }
-            if (GUI.Button(new Rect(100, 100, 100, 100), "Left"))
-            {
-                StartCoroutine(SwipeLeft());
-            }
-        }
+        //private void OnGUI()
+        //{
+        //    if (GUI.Button(new Rect(250, 100, 100, 100), "Right"))
+        //    {
+        //        StartCoroutine(SwipeRight());
+        //    }
+        //    if (GUI.Button(new Rect(100, 100, 100, 100), "Left"))
+        //    {
+        //        StartCoroutine(SwipeLeft());
+        //    }
+        //}
     }
 }
