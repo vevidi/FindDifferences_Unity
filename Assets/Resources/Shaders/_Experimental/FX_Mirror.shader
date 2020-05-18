@@ -5,6 +5,8 @@ Shader "FX/MirrorReflection"
 	Properties
 	{
 		_MainTex ("Base (RGB)", 2D) = "white" {}
+		_TopColor ("Top Color", Color) = (1, 1, 1, 1)
+		_BottomColor ("Bottom Color", Color) = (1, 1, 1, 1)
 		[HideInInspector] _ReflectionTex ("", 2D) = "white" {}
 	}
 	SubShader
@@ -13,6 +15,7 @@ Shader "FX/MirrorReflection"
 		LOD 100
  
 		Pass {
+		    Blend SrcAlpha OneMinusSrcAlpha
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -23,7 +26,9 @@ Shader "FX/MirrorReflection"
 				float4 refl : TEXCOORD1;
 				float4 pos : SV_POSITION;
 			};
+
 			float4 _MainTex_ST;
+			fixed4 _TopColor, _BottomColor;
 			v2f vert(float4 pos : POSITION, float2 uv : TEXCOORD0)
 			{
 				v2f o;
@@ -38,7 +43,8 @@ Shader "FX/MirrorReflection"
 			{
 				fixed4 tex = tex2D(_MainTex, i.uv);
 				fixed4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(i.refl));
-				return tex * refl;
+				fixed4 rez = tex * refl;
+				return rez;
 			}
 			ENDCG
 	    }

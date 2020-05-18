@@ -21,6 +21,7 @@ namespace Vevidi.Experimental
         private Transform thisTransform;
         private List<Transform> items;
         private bool isBlocked = false;
+        private bool preAnimationNeeded = false;
 
         private int currSelectedItem = 0;
 
@@ -30,7 +31,7 @@ namespace Vevidi.Experimental
             items = new List<Transform>();
 
             // TEST
-            Initialize(5);
+            Initialize(20);
         }
 
         public void Initialize(int itemsCount)
@@ -39,7 +40,7 @@ namespace Vevidi.Experimental
             {
                 items.Add(Instantiate(itemPrefab, thisTransform));
             }
-            ArrangeItems();
+            ArrangeItems(0, true);
         }
 
         public void Initialize(List<Transform> items)
@@ -47,26 +48,26 @@ namespace Vevidi.Experimental
             foreach (var item in items)
                 item.SetParent(thisTransform);
             this.items.AddRange(items);
-            ArrangeItems();
+            ArrangeItems(0, true);
         }
 
-        private void ArrangeItems(int selectedItemId = 4)
+        private void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false)
         {
             if (items.Count > 0)
             {
                 //TODO: refactor this
                 currSelectedItem = selectedItemId;
-                int idCenter = currSelectedItem;
 
-                items[idCenter].localPosition = centerPos;
-                for (int i = idCenter - 1; i >= 0; --i)
+                if (withCenterUpdate)
+                    items[currSelectedItem].localPosition = centerPos;
+                for (int i = currSelectedItem - 1; i >= 0; --i)
                 {
-                    items[i].localPosition = leftStartPos + posOffsetLeft * (idCenter - 1 - i);
+                    items[i].localPosition = leftStartPos + posOffsetLeft * (currSelectedItem - 1 - i);
                     items[i].localRotation = leftRotation;
                 }
-                for (int i = idCenter + 1; i < items.Count; ++i)
+                for (int i = currSelectedItem + 1; i < items.Count; ++i)
                 {
-                    items[i].localPosition = rightStartPos + posOffsetRight * (idCenter + 1 - i);
+                    items[i].localPosition = rightStartPos + posOffsetRight * (currSelectedItem + 1 - i);
                     items[i].localRotation = rightRotation;
                 }
             }
@@ -75,7 +76,7 @@ namespace Vevidi.Experimental
         private IEnumerator MoveTo(Transform objTrans, Vector3 position, Action callback = null, Action preCallback = null, float speed = 30f)
         {
             float step = speed * Time.deltaTime;
-            while(Vector3.Distance(objTrans.localPosition,position)>0.001f)
+            while (Vector3.Distance(objTrans.localPosition, position) > 0.001f)
             {
                 if (Vector3.Distance(objTrans.localPosition, position) < 1f && preAnimationNeeded)
                     preCallback?.Invoke();
@@ -101,18 +102,19 @@ namespace Vevidi.Experimental
             isBlocked = false;
         }
 
-        bool preAnimationNeeded = false;
         private void PreAnimationEnded()
         {
-            Debug.LogWarning("Pre ended");
+            //            Debug.LogWarning("Pre ended");
             preAnimationNeeded = false;
-            ArrangeItems(currSelectedItem);
+            ArrangeItems(currSelectedItem, false);
         }
 
         public IEnumerator SwipeRight()
         {
             if (currSelectedItem > 0 && !isBlocked)
             {
+                Debug.Log("DIST: " + Vector3.Distance(items[currSelectedItem - 1].localPosition, centerPos));
+
                 isBlocked = true;
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[currSelectedItem - 1], centerPos));
@@ -126,8 +128,10 @@ namespace Vevidi.Experimental
 
         public IEnumerator SwipeLeft()
         {
-            if (currSelectedItem < items.Count-1 && !isBlocked)
+            if (currSelectedItem < items.Count - 1 && !isBlocked)
             {
+                Debug.Log("DIST: " + Vector3.Distance(items[currSelectedItem + 1].localPosition, centerPos));
+
                 isBlocked = true;
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[currSelectedItem + 1], centerPos));
