@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5119945431191067942}
   - component: {fileID: 5119945431191067941}
   - component: {fileID: 5119945431191067940}
+  - component: {fileID: 3887040642966723723}
   m_Layer: 0
   m_Name: ScrollView3DPlane
   m_TagString: Untagged
@@ -98,6 +99,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &3887040642966723723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5119945431191067946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcaa283bed8238b4088f3b381045613f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blurredImage: {fileID: 5259361463222045360}
+  levelPassedCheckmark: {fileID: 9221484706745156330}
+  levelPassedGradient: {fileID: 8903767921840874939}
+  imageWithGradient: {fileID: 7362941185661380393}
 --- !u!1 &5259361463222045360
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,7 +321,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6641060725178688014
 Transform:
   m_ObjectHideFlags: 0
@@ -398,7 +415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4718089924900667746
 Transform:
   m_ObjectHideFlags: 0

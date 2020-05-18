@@ -59,6 +59,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelButtonPrefab: {fileID: 4390083060798938430, guid: cb41dddee550c4a4a94895fa614d0f7c,
     type: 3}
+  levelButton3DPrefab: {fileID: 3887040642966723723, guid: 673b0d3dccd1ecb44a04de03f24fd2ca,
+    type: 3}
 --- !u!114 &415681884
 MonoBehaviour:
   m_ObjectHideFlags: 0

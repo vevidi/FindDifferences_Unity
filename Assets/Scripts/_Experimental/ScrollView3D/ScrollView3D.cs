@@ -45,7 +45,7 @@ namespace Vevidi.Experimental
             items = new List<Transform>();
 
             // TEST
-            Initialize(20);
+            //Initialize(20);
         }
 
         public void Initialize(int itemsCount)
@@ -70,6 +70,12 @@ namespace Vevidi.Experimental
             if (items!=null && items.Count > 0 && (!isBlocked||ignoreBlocked))
             {
                 CurrentItem = selectedItemId;
+
+#if UNITY_EDITOR
+                // prevent Unity editor errors
+                if (items[CurrentItem] == null)
+                    return;
+#endif
 
                 if (withCenterUpdate)
                 {
