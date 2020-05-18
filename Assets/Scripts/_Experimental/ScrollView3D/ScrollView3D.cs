@@ -33,6 +33,7 @@ namespace Vevidi.Experimental
         private Transform thisTransform;
         private bool isBlocked = false;
         private bool preAnimationNeeded = false;
+        private List<ScrollView3DItem> itemsScripts;
 
         private int rightItemsCount = 0;
         private int leftItemsCount = 0;
@@ -43,6 +44,7 @@ namespace Vevidi.Experimental
         {
             thisTransform = transform;
             items = new List<Transform>();
+            itemsScripts = new List<ScrollView3DItem>();
 
             // TEST
             //Initialize(20);
@@ -52,7 +54,9 @@ namespace Vevidi.Experimental
         {
             for (int i = 0; i < itemsCount; ++i)
             {
-                items.Add(Instantiate(itemPrefab, thisTransform));
+                var currItem = Instantiate(itemPrefab, thisTransform);
+                items.Add(currItem);
+                itemsScripts.Add(currItem.GetComponent<ScrollView3DItem>());
             }
             ArrangeItems(0, true);
         }
@@ -60,9 +64,25 @@ namespace Vevidi.Experimental
         public void Initialize(List<Transform> items)
         {
             foreach (var item in items)
+            {
                 item.SetParent(thisTransform);
+                itemsScripts.Add(item.GetComponent<ScrollView3DItem>());
+            }
             this.items.AddRange(items);
+
             ArrangeItems(0, true);
+        }
+
+        private void BlockItems(bool isBlocked)
+        {
+            foreach (var item in itemsScripts)
+                item.BlockItem(isBlocked);
+        }
+
+        private void BlockItemsExceptCurrent()
+        {
+            BlockItems(true);
+            itemsScripts[CurrentItem].BlockItem(false);
         }
 
         public void ArrangeItems(int selectedItemId = 0, bool withCenterUpdate = false, bool ignoreBlocked = false)
@@ -108,6 +128,7 @@ namespace Vevidi.Experimental
                         items[i].localRotation = rightRotation;
                     }
                 }
+                BlockItemsExceptCurrent();
             }
         }
 
@@ -138,6 +159,8 @@ namespace Vevidi.Experimental
         private void AnimationEnded()
         {
             isBlocked = false;
+            //BlockItems(isBlocked);
+            BlockItemsExceptCurrent();
         }
 
         private void PreAnimationEnded()
@@ -151,6 +174,7 @@ namespace Vevidi.Experimental
             if (CurrentItem > 0 && !isBlocked)
             {
                 isBlocked = true;
+                BlockItems(isBlocked);
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[CurrentItem - 1], centerPos));
                 StartCoroutine(RotateTo(items[CurrentItem - 1], centerRotation));
@@ -165,6 +189,7 @@ namespace Vevidi.Experimental
             if (CurrentItem < items.Count - 1 && !isBlocked)
             {
                 isBlocked = true;
+                BlockItems(isBlocked);
                 preAnimationNeeded = true;
                 StartCoroutine(MoveTo(items[CurrentItem + 1], centerPos));
                 StartCoroutine(RotateTo(items[CurrentItem + 1], centerRotation));
