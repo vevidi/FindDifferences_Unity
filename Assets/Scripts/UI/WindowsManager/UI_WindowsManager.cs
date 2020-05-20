@@ -52,9 +52,6 @@ namespace Vevidi.FindDiff.UI
                 if (prefab != null && popupsRoot != null)
                 {
                     GameObject wnd = Instantiate(prefab, popupsRoot);
-
-                    Debug.LogWarning(wnd.name);
-
                     IBasePopup popup = wnd.GetComponent<IBasePopup>();
                     if (popup != null)
                         popup.Init(cfg);
@@ -65,10 +62,10 @@ namespace Vevidi.FindDiff.UI
                     windowsStack.Push(type);
                 }
                 else
-                    Debug.LogError("Cannot find prefab for type <" + type + "> or type is incorrect!");
+                    Utils.DebugLog("Cannot find prefab for type <" + type + "> or type is incorrect!",eLogType.Error);
             }
             else
-                Debug.LogError("Windows manager does not contain window info for type: " + type);
+                Utils.DebugLog("Windows manager does not contain window info for type: " + type,eLogType.Error);
         }
 
         public void HideWindow(eWindowType type)

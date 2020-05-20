@@ -59,8 +59,6 @@ namespace Vevidi.FindDiff.Network
                 onError?.Invoke("Image not loaded: " + loadImgResult.fName);
             else
                 onComplete?.Invoke(gameInfo);
-
-            Debug.LogWarning("------ LOADED ------");
         }
     }
 }

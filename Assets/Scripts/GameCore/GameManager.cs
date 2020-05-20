@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Vevidi.FindDiff.Factories;
 using Vevidi.FindDiff.GameMediator;
+using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
@@ -13,7 +14,7 @@ namespace Vevidi.FindDiff.GameLogic
             {
                 if (isShuttingDown)
                 {
-                    Debug.LogWarning("Game manager is shutting down");
+                    Utils.DebugLog("Game manager is shutting down", eLogType.Warning);
                     return null;
                 }
                 return instance;
@@ -29,11 +30,11 @@ namespace Vevidi.FindDiff.GameLogic
         public void InitLevelsManager(LevelsModel model)
         {
             LevelsManager = new LevelsManager();
-            if(!SaveManager.SaveLoaded)
+            if (!SaveManager.SaveLoaded)
             {
                 LevelsManager.InitFromLevelsModel(model);
             }
-            else if(SaveManager.SaveVersion != model.Version)
+            else if (SaveManager.SaveVersion != model.Version)
             {
                 LevelsManager.InitFromLevelsModelAndSave(model, SaveManager.GameSave);
             }

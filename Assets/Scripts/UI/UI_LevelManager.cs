@@ -41,14 +41,12 @@ namespace Vevidi.FindDiff.UI
 
         private void OnDifferenceFound(UpdateDiffCountCommand command)
         {
-            Debug.Log(command.DiffFoundValue);
             diffFoundText.text = string.Format("Differences found: {0}/{1}", command.DiffFoundValue, command.MaxValue);
         }
 
         private void OnLivesCountChanged(UpdateLivesCountCommand command)
         {
             // TODO: add some stuff here
-            Debug.Log("Lives count -> " + command.LivesCount);
             livesImage.fillAmount = 1f * command.LivesCount / command.MaxLives;
         }
 

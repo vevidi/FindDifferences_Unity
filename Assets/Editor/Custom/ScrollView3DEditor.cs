@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using Vevidi.Experimental;
+using Vevidi.FindDiff.UI;
 
 namespace Vevidi.CustomGameEditor
 {

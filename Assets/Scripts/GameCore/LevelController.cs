@@ -69,8 +69,6 @@ namespace Vevidi.FindDiff.GameLogic
             backgroundClickArea = backgroundImage.GetComponent<ClickableBackground>();
             backgroundClickArea.OnBackgroundClick += OnMissTap;
             UpdateSize();
-
-            Debug.Log("Level controller -> Loaded level: " + levelInfo);
         }
 
         private void RemoveOneLive()
@@ -157,9 +155,8 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void GoToNextLevel(NextLevelCommand command)
         {
-            int selectedLevelID = levelManager.GetSelectedLevel();
-            levelManager.SelectLevel(selectedLevelID + 1);
-            levelInfo = levelManager.GetLevelByID(selectedLevelID + 1);
+            levelManager.SelectLevel(command.LevelID);
+            levelInfo = levelManager.GetLevelByID(command.LevelID);// + 1);
             ClearLevel();
             InitLevel();
         }

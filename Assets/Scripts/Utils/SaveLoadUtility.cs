@@ -8,7 +8,7 @@ namespace Vevidi.FindDiff.GameUtils
         public static Texture2D LoadImage(string imageName, string imageFolder = "LoadedImages")
         {
             string path = Application.persistentDataPath + "/" + imageFolder + "/" + imageName;
-            Debug.Log("Load at path: " + path);
+            Utils.DebugLog("Load at path: " + path);
             byte[] bytes = System.IO.File.ReadAllBytes(path);
             Texture2D newTexture = new Texture2D(1, 1);
             newTexture.LoadImage(bytes);
@@ -19,7 +19,7 @@ namespace Vevidi.FindDiff.GameUtils
         public static void SaveImage(Texture2D image, string imageName, string imageFolder = "LoadedImages")
         {
             string folderPath = Application.persistentDataPath + "/" + imageFolder;
-            Debug.Log(folderPath);
+            Utils.DebugLog("Image saved: " + folderPath);
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
             File.WriteAllBytes(folderPath + "/" + imageName, image.EncodeToJPG());

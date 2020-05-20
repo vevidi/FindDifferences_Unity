@@ -2,6 +2,7 @@
 using System.IO;
 using UnityEngine;
 using Vevidi.FindDiff.GameModel;
+using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.FindDiff.GameLogic
 {
@@ -16,20 +17,23 @@ namespace Vevidi.FindDiff.GameLogic
             GameSave = new GameSaveModel();
         }
 
-        public void SaveGame(List<LevelDescriptionModel> allLevels, int version = -1)
+        public void SaveGame(List<LevelDescriptionModel> allLevels, int version = -1, int selectedLevel = 0)
         {
-            GameSaveModel saveModel = new GameSaveModel(allLevels, version);
-            GameManager.Instance.SaveManager.SaveGameInternal(saveModel);
+            GameSaveModel saveModel = new GameSaveModel(allLevels, version, selectedLevel);
+            SaveGameInternal(saveModel);
         }
 
-        private void SaveGameInternal(GameSaveModel gameSave, int version = -1)
+        private void SaveGameInternal(GameSaveModel gameSave)
         {
-            int currVersion = version;
+            int currVersion = gameSave.Version;
             if (currVersion == -1)
+            {
                 currVersion = GameSave.Version;
+                gameSave.Version = GameSave.Version;
+            }
             GameSave = gameSave;
             string saveJson = GameSave.Encode();
-            Debug.Log("Save path -> " + Application.persistentDataPath + "/save.dat");
+            Utils.DebugLog("Save path -> " + Application.persistentDataPath + "/save.dat");
             if (File.Exists(Application.persistentDataPath + "/save.dat"))
                 File.Delete(Application.persistentDataPath + "/save.dat");
             StreamWriter writer = new StreamWriter(Application.persistentDataPath + "/save.dat");
@@ -39,7 +43,7 @@ namespace Vevidi.FindDiff.GameLogic
 
         public void LoadSave()
         {
-            Debug.LogWarning("Load path -> " + Application.persistentDataPath + "/save.dat");
+            Utils.DebugLog("Load path -> " + Application.persistentDataPath + "/save.dat");
             if (File.Exists(Application.persistentDataPath + "/save.dat"))
             {
                 StreamReader reader = new StreamReader(Application.persistentDataPath + "/save.dat");

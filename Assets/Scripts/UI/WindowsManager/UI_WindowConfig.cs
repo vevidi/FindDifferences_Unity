@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Vevidi.FindDiff.GameUtils;
 using static Vevidi.FindDiff.UI.UI_WindowsManager;
 
 namespace Vevidi.FindDiff.UI
@@ -29,7 +30,7 @@ namespace Vevidi.FindDiff.UI
             else
             {
                 WData["key"] = value;
-                Debug.LogWarning("Key " + key + " already present in window data! Rewriting.");
+                Utils.DebugLog("Key " + key + " already present in window data! Rewriting.", eLogType.Warning);
             }
         }
 
@@ -42,7 +43,7 @@ namespace Vevidi.FindDiff.UI
             else
             {
                 CData["key"] = callback;
-                Debug.LogWarning("Key " + key + " already present in window callbacks! Rewriting.");
+                Utils.DebugLog("Key " + key + " already present in window callbacks! Rewriting.",eLogType.Warning);
             }
         }
     }

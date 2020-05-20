@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,6 +11,13 @@ using Random = UnityEngine.Random;
 
 namespace Vevidi.FindDiff.GameUtils
 {
+    public enum eLogType
+    {
+        Log,
+        Warning,
+        Error
+    }
+
     public static class Utils
     {
         public struct SpritePivot
@@ -63,8 +71,33 @@ namespace Vevidi.FindDiff.GameUtils
         {
             foreach (KeyValuePair<T1, T2> kvp in dictionary)
             {
-                Debug.LogWarning("Dict: " + string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
+                DebugLog("Dict: " + string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
             }
+        }
+
+        public static void ClearLog()
+        {
+#if UNITY_EDITOR
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
+#endif
+        }
+
+        public static void DebugLog(object message, eLogType logType = eLogType.Log)
+        {
+#if UNITY_EDITOR
+            switch(logType)
+            {
+                case eLogType.Log:
+                    Debug.Log(message); break;
+                case eLogType.Warning:
+                    Debug.LogWarning(message); break;
+                case eLogType.Error:
+                    Debug.LogError(message); break;
+            }
+#endif
         }
 
         public static bool IsMobile()

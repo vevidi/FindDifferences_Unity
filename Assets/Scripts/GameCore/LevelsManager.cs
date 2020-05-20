@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Vevidi.FindDiff.GameMediator.Commands;
 using Vevidi.FindDiff.GameModel;
+using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
@@ -8,7 +10,7 @@ namespace Vevidi.FindDiff.GameLogic
     public class LevelsManager
     {
         private List<LevelDescriptionModel> allLevels;
-        private int selectedLevel = -1;
+        private int selectedLevel = 0;
 
         public LevelsManager()
         {
@@ -25,8 +27,11 @@ namespace Vevidi.FindDiff.GameLogic
                 allLevels.Add(lDescrModel);
             }
             // save loaded info
+            SelectLevel(0);
             GameManager.Instance.SaveManager.SaveGame(allLevels, model.Version);
-            Debug.LogWarning("->>>> InitFromLevelsModel");
+            Utils.DebugLog("->>>> InitFromLevelsModel");
+
+            GameManager.Instance.gameEventSystem.Subscribe<NextLevelCommand>(OnSelectLevel);
         }
 
         public void InitFromLevelsModelAndSave(LevelsModel lModel, GameSaveModel sModel)
@@ -35,12 +40,13 @@ namespace Vevidi.FindDiff.GameLogic
             for (int i = 0; i < allLevels.Count; ++i)
             {
                 var savedLevel = sModel.GetLevel(allLevels[i].Id);
-                allLevels[i].IsEnded = savedLevel.IsEnded;
-                allLevels[i].IsOpened = savedLevel.IsOpened;
+                allLevels[i].IsEnded = savedLevel != null ? savedLevel.IsEnded : false;
+                allLevels[i].IsOpened = savedLevel != null ? savedLevel.IsOpened : false;
             }
             // resave with new info
-            GameManager.Instance.SaveManager.SaveGame(allLevels, lModel.Version);
-            Debug.LogWarning("->>>> InitFromLevelsModelAndSave");
+            SelectLevel(sModel.SelectedLevel);
+            GameManager.Instance.SaveManager.SaveGame(allLevels, lModel.Version, sModel.SelectedLevel);
+            Utils.DebugLog("->>>> InitFromLevelsModelAndSave");
         }
 
         public void InitFromLevelsSave(GameSaveModel model)
@@ -48,7 +54,8 @@ namespace Vevidi.FindDiff.GameLogic
             allLevels = model.Levels;
             foreach (var level in allLevels)
                 level.LoadImage();
-            Debug.LogWarning("->>>> InitFromLevelsSave");
+            SelectLevel(model.SelectedLevel);
+            Utils.DebugLog("->>>> InitFromLevelsSave");
         }
 
         public List<LevelDescriptionModel> GetAllLevels()
@@ -56,15 +63,22 @@ namespace Vevidi.FindDiff.GameLogic
             return allLevels;
         }
 
+        private void OnSelectLevel(NextLevelCommand command)
+        {
+            SelectLevel(command.LevelID);
+        }
+
         public void SelectLevel(int id)
         {
             selectedLevel = id;
+            if (selectedLevel > allLevels.Count - 1)
+                selectedLevel = allLevels.Count - 1;
         }
 
         public int GetSelectedLevel()
         {
             if (selectedLevel == -1)
-                Debug.LogError("LevelsManager -> Level NOT selected!");
+                Utils.DebugLog("LevelsManager -> Level NOT selected!",eLogType.Error);
             return selectedLevel;
         }
 
@@ -75,7 +89,7 @@ namespace Vevidi.FindDiff.GameLogic
             var nextLevel = GetLevelByID(levelID + 1);
             if (nextLevel != null)
                 nextLevel.IsOpened = true;
-            GameManager.Instance.SaveManager.SaveGame(allLevels);
+            GameManager.Instance.SaveManager.SaveGame(allLevels, -1, levelID + 1);
         }
 
         public LevelDescriptionModel GetLevelByID(int id)

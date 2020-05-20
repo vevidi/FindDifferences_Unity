@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.GameMediator.Commands;
 using Vevidi.FindDiff.NetworkModel;
@@ -33,6 +34,14 @@ namespace Vevidi.FindDiff.GameLogic
             wavesParticles = GetComponentInChildren<ParticleSystem>();
         }
 
+#if UNITY_EDITOR
+        // just for editor debug
+        private void Start()
+        {
+            GetComponent<Image>().color = new Color32(255, 255, 255, 128);
+        }
+#endif
+
         public void PlayHintAnimation()
         {
             if (wavesParticles.isPlaying)
@@ -42,7 +51,6 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void OnClick()
         {
-            Debug.Log("On click");
             GameManager.Instance.gameEventSystem.Publish(new DiffFoundCommand(model,this));
             gameObject.SetActive(false);
         }

@@ -20,6 +20,7 @@ namespace Vevidi.FindDiff.Factories
             TouchableArea area = CreateItem(touchableAreaPrefab);
             area.transform.SetParent(parent);
             area.Init(model, offsetX, offsetY);
+            area.gameObject.name = "Area " + model.Id;
             return area;
         }
 

@@ -28,7 +28,8 @@ namespace Vevidi.FindDiff.UI
         private void OnNextLvButtonClick()
         {
             OnCloseButtonClick();
-            gameEvents.Publish(new NextLevelCommand());
+            int selectedLevelID = GameManager.Instance.LevelsManager.GetSelectedLevel();
+            gameEvents.Publish(new NextLevelCommand(selectedLevelID+1));
         }
     }
 }

@@ -5,7 +5,7 @@ JSON data example
   "version": 1,
   "levels": [
     {
-      "id": 1,
+      "id": 0,
       "img": "test1.jpg",
       "differences": [
         {
@@ -34,7 +34,7 @@ JSON data example
 
 version - current config version (if version changes - app reloads data, images, etc)
 levels - array of level configs
-	id - level ID
+	id - level ID (starting from 0)
 	img - level background image
 	differences - array of difference points configs
 		id - point ID

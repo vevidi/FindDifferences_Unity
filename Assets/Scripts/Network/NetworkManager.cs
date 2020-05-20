@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using Vevidi.FindDiff.GameUtils;
 
 namespace Vevidi.FindDiff.Network
 {
@@ -47,13 +48,13 @@ namespace Vevidi.FindDiff.Network
         {
             if (req.isHttpError)
             {
-                Debug.LogWarning("Http error: " + req.error + " " + req.url);
+                Utils.DebugLog("Http error: " + req.error + " " + req.url, eLogType.Warning);
                 onError?.Invoke("Http error: " + req.error + " " + req.url);
                 return true;
             }
             if (req.isNetworkError)
             {
-                Debug.LogWarning("Network error: " + req.error + " " + req.url);
+                Utils.DebugLog("Network error: " + req.error + " " + req.url, eLogType.Warning);
                 onError?.Invoke("Network error: " + req.error + " " + req.url);
                 return true;
             }
@@ -66,7 +67,7 @@ namespace Vevidi.FindDiff.Network
             await req.SendWebRequest();
             if (!CheckForError(req, onError))
             {
-                Debug.LogWarning("Texture request success " + url);
+                Utils.DebugLog("Texture request success " + url);
                 DownloadHandlerTexture texHandler = req.downloadHandler as DownloadHandlerTexture;
                 return texHandler.texture;
             }
@@ -84,10 +85,8 @@ namespace Vevidi.FindDiff.Network
             await req.SendWebRequest();
             if (!CheckForError(req,onError))
             {
-                Debug.LogWarning("Http request success " + url);
-#if UNITY_EDITOR
-                Debug.LogWarning(req.downloadHandler.text);
-#endif
+                Utils.DebugLog("Http request success " + url);
+                Utils.DebugLog(req.downloadHandler.text,eLogType.Warning);
                 return req.downloadHandler.text;
             }
             return default;
@@ -99,7 +98,7 @@ namespace Vevidi.FindDiff.Network
             await req.SendWebRequest();
             if (req.isHttpError || req.isNetworkError)
             {
-                Debug.LogWarning(req.error);
+                Utils.DebugLog("Check connection error: " + req.error, eLogType.Warning);
                 return false;
             }
             else
@@ -115,7 +114,7 @@ namespace Vevidi.FindDiff.Network
                 if (result)
                     callback?.Invoke();
                 else
-                    Debug.LogWarning("Network Manager -> No internet connection!");
+                    Utils.DebugLog("Network Manager -> No internet connection!",eLogType.Warning);
             }
             catch (Exception e)
             {

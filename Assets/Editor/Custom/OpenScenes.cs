@@ -7,39 +7,30 @@ using UnityEngine;
 public class OpenScenes
 {
     private const string SC_PREFIX = "Assets/Scenes/";
-    private const string SC_PREFIX_EXP = "Assets/Scenes/_Experimental/";
     private const string SC_SUFFIX = ".unity";
 
-    [MenuItem("Custom/Run from preloader")]
-    static void Run()
+    [MenuItem("Custom/Run&Stop from preloader")]
+    static void RunStop()
     {
-        var newSettings = new EditorBuildSettingsScene[3];
-        var sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX+GameVariables.PreloaderScene+SC_SUFFIX, true);
-        newSettings[0] = sceneToAdd;
-        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.MainMenuScene + SC_SUFFIX, true);
-        newSettings[1] = sceneToAdd;
-        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.LevelScene + SC_SUFFIX, true);
-        newSettings[2] = sceneToAdd;
-        EditorBuildSettings.scenes = newSettings;
+        if (EditorApplication.isPlaying)
+        {
+            Debug.LogWarning("PLAYING");
+            EditorApplication.isPlaying = false;// ExecuteMenuItem("Edit/Play");
+        }
+        else
+        {
+            var newSettings = new EditorBuildSettingsScene[3];
+            var sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.PreloaderScene + SC_SUFFIX, true);
+            newSettings[0] = sceneToAdd;
+            sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.MainMenuScene + SC_SUFFIX, true);
+            newSettings[1] = sceneToAdd;
+            sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.LevelScene + SC_SUFFIX, true);
+            newSettings[2] = sceneToAdd;
+            EditorBuildSettings.scenes = newSettings;
 
-        OpenPreloader();
-        EditorApplication.ExecuteMenuItem("Edit/Play");
-    }
-
-    [MenuItem("Custom/Run from preloader experimental")]
-    static void RunExp()
-    {
-        var newSettings = new EditorBuildSettingsScene[3];
-        var sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.PreloaderScene + SC_SUFFIX, true);
-        newSettings[0] = sceneToAdd;
-        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX_EXP + GameVariables.MainMenuScene + SC_SUFFIX, true);
-        newSettings[1] = sceneToAdd;
-        sceneToAdd = new EditorBuildSettingsScene(SC_PREFIX + GameVariables.LevelScene + SC_SUFFIX, true);
-        newSettings[2] = sceneToAdd;
-        EditorBuildSettings.scenes = newSettings;
-
-        OpenPreloader();
-        EditorApplication.ExecuteMenuItem("Edit/Play");
+            OpenPreloader();
+            EditorApplication.ExecuteMenuItem("Edit/Play");
+        }
     }
 
     [MenuItem("Custom/Open Preloader scene")]
