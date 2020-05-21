@@ -36,6 +36,9 @@ namespace Vevidi.FindDiff.GameEditor
                 GameObject editorManager = GameObject.Find("EditorManager");
                 GameEditorManager manager = editorManager.GetComponent<GameEditorManager>();
                 manager.CreateClickArea();
+                var currArea = manager.GetDifferenceArea(manager.GetDifferencesCount());
+                if (currArea != null)
+                    Selection.SetActiveObjectWithContext(currArea.gameObject, null);
             }
 
             GUILayout.Space(10);

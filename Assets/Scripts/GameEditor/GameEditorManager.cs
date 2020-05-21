@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameUtils;
@@ -21,8 +20,6 @@ namespace Vevidi.FindDiff.GameEditor
 
 #pragma warning restore 0649
 
-        private const string PATH = "Assets/GameResources/Sprites/GameEditor/";
-
         private Image playFieldBg;
         private int maxLevelId = -1;
         private int selectedLevelId = -1;
@@ -33,6 +30,7 @@ namespace Vevidi.FindDiff.GameEditor
         public bool IsLevelOpened { get; set; } = false;
         public LevelInfoModel SelectedLevel { get; private set; }
         public int SelectedAreaId { get; set; }
+        public Image PlayFieldBg { get => playFieldBg; }
 
         //TODO: refactor
         [HideInInspector]
@@ -69,7 +67,6 @@ namespace Vevidi.FindDiff.GameEditor
         {
             levelsModel.Levels.Add(new LevelInfoModel(maxLevelId + 1));
             ++maxLevelId;
-            EditorUtility.SetDirty(this);
         }
 
         public void RemoveLevel(int levelId)
@@ -92,7 +89,13 @@ namespace Vevidi.FindDiff.GameEditor
             areas.Clear();
         }
 
-        public void OpenLevel(int levelId)
+        public string GetImageName(int levelId)
+        {
+            var model = levelsModel.Levels.Find((l) => l.Id == levelId);
+            return model.Image;
+        }
+
+        public void OpenLevel(int levelId, Sprite image)
         {
             SelectedAreaId = -1;
             if (areas != null && areas.Count > 0)
@@ -102,11 +105,10 @@ namespace Vevidi.FindDiff.GameEditor
             if (SelectedLevel != null)
             {
                 string imageName = SelectedLevel.Image;
-                var image = AssetDatabase.LoadAssetAtPath(PATH + imageName, typeof(Sprite)) as Sprite;
+                
                 if (image != null)
                 {
                     playFieldBg.overrideSprite = image;
-                    EditorUtility.SetDirty(playFieldBg);
                     IsLevelOpened = true;
                     selectedLevelId = levelId;
 
@@ -115,7 +117,7 @@ namespace Vevidi.FindDiff.GameEditor
                         CreateAreasPair(difference);
                 }
                 else
-                    Debug.LogWarning("Cannot find image at path: " + PATH + imageName);
+                    Debug.LogWarning("Cannot find image: " + imageName);
             }
             else
                 Debug.LogWarning("Cannot find image for level: " + levelId);
@@ -150,7 +152,6 @@ namespace Vevidi.FindDiff.GameEditor
                 Debug.LogError("Something wrong in save level! Incorrect level ID");
             ClearAreas();
             SelectedLevel = null;
-            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
         }
 
         public void CloseLevel()
@@ -159,7 +160,6 @@ namespace Vevidi.FindDiff.GameEditor
             playFieldBg.overrideSprite = null;
             ClearAreas();
             SelectedLevel = null;
-            EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
         }
 
         private DifferenceArea CreateClickArea(DifferenceInfoModel model, bool hided = true, int offsetX = 0, int offsetY = 0)
@@ -179,6 +179,17 @@ namespace Vevidi.FindDiff.GameEditor
             return area;
         }
 
+        public DifferenceArea GetDifferenceArea(int areaId)
+        {
+            return areas.Find((ar) => ar.Id == areaId);
+        }
+
+        public int GetDifferencesCount()
+        {
+            var differences = levelsModel.Levels[selectedLevelId].Differences;
+            return differences.Count;
+        }
+
         public void SelectClickArea(int areaId)
         {
             var currArea = areas.Find((ar) => ar.Id == areaId);
@@ -186,7 +197,6 @@ namespace Vevidi.FindDiff.GameEditor
             {
                 SelectedAreaId = areaId;
                 currArea.SetSelected();
-                Selection.SetActiveObjectWithContext(currArea.gameObject, null);
             }
             else
                 Debug.LogWarning("Something wrong in select area! Cannot find area: " + areaId);
@@ -229,7 +239,6 @@ namespace Vevidi.FindDiff.GameEditor
             DifferenceInfoModel model = new DifferenceInfoModel(differences.Count + 1, 0, 0, 20);
             differences.Add(model);
             CreateAreasPair(model);
-            SelectClickArea(differences.Count);
         }
     }
 }

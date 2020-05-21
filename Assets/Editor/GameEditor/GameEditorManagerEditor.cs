@@ -2,16 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Vevidi.FindDiff.GameEditor
 {
-//    [ExecuteInEditMode]
+    //    [ExecuteInEditMode]
     [InitializeOnLoad]
     [CustomEditor(typeof(GameEditorManager))]
     public class GameEditorManagerEditor : Editor
     {
+        private const string PATH = "Assets/GameResources/Sprites/GameEditor/";
+
         private GameEditorManager manager;
 
         private GameEditorManagerEditor()
@@ -47,7 +50,12 @@ namespace Vevidi.FindDiff.GameEditor
                     GUILayout.Space(20);
                     GUI.backgroundColor = new Color(52 / 255f, 145 / 255f, 55 / 255f);
                     if (GUILayout.Button("Open"))
-                        manager.OpenLevel(level.Id);
+                    {
+                        string imageName = manager.GetImageName(level.Id);
+                        var image = AssetDatabase.LoadAssetAtPath(PATH + imageName, typeof(Sprite)) as Sprite;
+                        manager.OpenLevel(level.Id, image);
+                    }
+                    EditorUtility.SetDirty(manager.PlayFieldBg);
                     GUI.backgroundColor = Color.white;
                     GUILayout.Space(20);
                     GUI.backgroundColor = new Color(222 / 255f, 62 / 255f, 62 / 255f);
@@ -60,9 +68,12 @@ namespace Vevidi.FindDiff.GameEditor
                 GUILayout.Space(20);
                 GUI.backgroundColor = new Color(52 / 255f, 145 / 255f, 55 / 255f);
                 if (GUILayout.Button("Add new level", GUILayout.Height(30)))
+                {
                     manager.CreateLevel();
+                    EditorUtility.SetDirty(target);
+                }
 
-                GUILayout.Space(20);
+                    GUILayout.Space(20);
                 GUI.backgroundColor = new Color(52 / 255f, 145 / 255f, 55 / 255f);
                 if (GUILayout.Button("Save to JSON", GUILayout.Height(30)))
                     SaveLevelsJsonClick();
@@ -83,7 +94,12 @@ namespace Vevidi.FindDiff.GameEditor
                     GUILayout.Space(20);
                     GUI.backgroundColor = new Color(52 / 255f, 145 / 255f, 55 / 255f);
                     if (GUILayout.Button("Select"))
+                    {
                         manager.SelectClickArea(difference.Id);
+                        var currArea = manager.GetDifferenceArea(difference.Id);
+                        if(currArea!=null)
+                            Selection.SetActiveObjectWithContext(currArea.gameObject, null);
+                    }
                     GUI.backgroundColor = Color.white;
                     GUILayout.EndHorizontal();
                 }
@@ -91,22 +107,36 @@ namespace Vevidi.FindDiff.GameEditor
                 GUILayout.Space(20);
                 GUI.backgroundColor = new Color(52 / 255f, 145 / 255f, 55 / 255f);
                 if (GUILayout.Button("Add new"))
+                {
                     manager.CreateClickArea();
+                    var currArea = manager.GetDifferenceArea(manager.GetDifferencesCount());
+                    if (currArea != null)
+                        Selection.SetActiveObjectWithContext(currArea.gameObject, null);
+                }
                 GUILayout.Space(40);
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("Save level"))
+                {
                     manager.SaveLevel();
+                    EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+                }
                 GUILayout.Space(10);
                 GUI.backgroundColor = new Color(222 / 255f, 62 / 255f, 62 / 255f);
                 if (GUILayout.Button("Close level"))
+                {
                     manager.CloseLevel();
+                    EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+                }
                 GUI.backgroundColor = Color.white;
                 GUILayout.EndHorizontal();
             }
             else
             {
                 if (GUILayout.Button("Go back"))
+                {
                     manager.CloseLevel();
+                    EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+                }
             }
         }
 
