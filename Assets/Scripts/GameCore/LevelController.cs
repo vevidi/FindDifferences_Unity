@@ -127,6 +127,13 @@ namespace Vevidi.FindDiff.GameLogic
             UI_WindowsManager.Instance.ShowWindow(new UI_WindowConfig(UI_WindowsManager.eWindowType.Lose));
         }
 
+        private void CreateClickArea(DifferenceInfoModel model, int offsetX = 0, int offsetY = 0)
+        {
+            TouchableArea area = levelObjFactory.CreateTouchableArea(gameFieldRoot, model, offsetX, offsetY);
+            area.SetClickableArea(backgroundClickArea);
+            touchableAreas.Add(area);
+        }
+
         private void InitLevel()
         {
             backgroundImage.overrideSprite = Utils.GetSpriteFromTex2D(levelInfo.LevelImage);
@@ -134,10 +141,10 @@ namespace Vevidi.FindDiff.GameLogic
             differences = diffs.Clone() as List<DifferenceInfoModel>;
             foreach (var diff in differences)
             {
-                TouchableArea area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff, -gameFieldWidth / 2, 0);
-                touchableAreas.Add(area);
-                area = levelObjFactory.CreateTouchableArea(gameFieldRoot, diff);
-                touchableAreas.Add(area);
+                // right item
+                CreateClickArea(diff, -gameFieldWidth / 2);
+                // left item
+                CreateClickArea(diff);
             }
             liveCount = 5;
             gameEvents.Publish(new UpdateLivesCountCommand(liveCount, maxLives));

@@ -3,14 +3,21 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Vevidi.FindDiff.GameMediator;
 using Vevidi.FindDiff.GameMediator.Commands;
+using Vevidi.FindDiff.GameUtils;
 using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
 {
-    public class TouchableArea : MonoBehaviour, ICanvasRaycastFilter, IPointerClickHandler
+    public class TouchableArea : MonoBehaviour, /*ICanvasRaycastFilter,*/ IPointerClickHandler
     {
+#pragma warning disable 0649
+        [SerializeField]
+        private RectTransform debugPoint;
+#pragma warning restore 0649
+
         private DifferenceInfoModel model;
-        private RectTransform rectTransform;
+        private RectTransform thisTransform;
+        private ClickableBackground parentClickArea;
         private ParticleSystem wavesParticles;
         private float radius = 50f;
 
@@ -18,9 +25,15 @@ namespace Vevidi.FindDiff.GameLogic
         {
             this.model = model;
             radius = model.Radius;
-            rectTransform.sizeDelta = Vector2.one * radius * 2;
-            rectTransform.localPosition = new Vector2(model.X + offsetX, model.Y + offsetY);
-            rectTransform.localScale = Vector3.one;
+            thisTransform.sizeDelta = Vector2.one * radius * 2;
+            thisTransform.localPosition = new Vector2(model.X + offsetX, model.Y + offsetY);
+            thisTransform.localScale = Vector3.one;
+        }
+
+        public void SetClickableArea(ClickableBackground area)
+        {
+            parentClickArea = area;
+            Utils.DebugLog(parentClickArea.gameObject.name, eLogType.Warning);
         }
 
         public int GetId()
@@ -30,7 +43,7 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void Awake()
         {
-            rectTransform = GetComponent<RectTransform>();
+            thisTransform = GetComponent<RectTransform>();
             wavesParticles = GetComponentInChildren<ParticleSystem>();
         }
 
@@ -39,6 +52,7 @@ namespace Vevidi.FindDiff.GameLogic
         private void Start()
         {
             GetComponent<Image>().color = new Color32(255, 255, 255, 128);
+            CreateDebugPoints();
         }
 #endif
 
@@ -51,20 +65,49 @@ namespace Vevidi.FindDiff.GameLogic
 
         private void OnClick()
         {
-            GameManager.Instance.gameEventSystem.Publish(new DiffFoundCommand(model,this));
+            GameManager.Instance.gameEventSystem.Publish(new DiffFoundCommand(model, this));
             gameObject.SetActive(false);
-        }
-
-        public bool IsRaycastLocationValid(Vector2 sp, Camera eventCamera)
-        {
-            Vector2 screenPoint = eventCamera.WorldToScreenPoint(rectTransform.position);
-            bool isClickable = Vector2.Distance(sp, screenPoint) < radius;
-            return isClickable;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            OnClick();
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                GetComponent<RectTransform>(),
+                eventData.position,
+                eventData.pressEventCamera,
+                out Vector2 localCursor))
+            {
+                return;
+            }
+#if UNITY_EDITOR
+            CreateDebugClickPoint(localCursor);
+#endif
+            if (localCursor.magnitude <= radius)
+                OnClick();
+            else
+                parentClickArea.OnPointerDown(eventData);
         }
+
+        // ------------ DEBUG functionality -----------
+        private void CreateDebugPoints()
+        {
+            float delta = 2 * Mathf.PI / 50;
+            for (int i = 0; i < 50; ++i)
+            {
+                float x = radius * Mathf.Cos(delta * i);
+                float y = radius * Mathf.Sin(delta * i);
+                RectTransform rTrans = Instantiate(debugPoint, thisTransform);
+                rTrans.localPosition = new Vector3(x, y, 0);
+            }
+        }
+
+        private void CreateDebugClickPoint(Vector2 clickPosition)
+        {
+            var spT = Instantiate(debugPoint, thisTransform);
+            spT.localPosition = clickPosition;
+            spT.GetComponent<Image>().color = Color.green;
+            spT.sizeDelta = new Vector2(5, 5);
+        }
+        // --------------------------------------------
     }
 }
