@@ -8,10 +8,7 @@ namespace Vevidi.FindDiff.UI
     {
         private UI_WindowConfig currConfig;
 
-        public UI_WindowConfigBuilder(eWindowType wType)
-        {
-            currConfig = new UI_WindowConfig(wType);
-        }
+        public UI_WindowConfigBuilder(eWindowType wType) => currConfig = new UI_WindowConfig(wType);
 
         public UI_WindowConfigBuilder AddData(string key, object value)
         {
@@ -25,9 +22,6 @@ namespace Vevidi.FindDiff.UI
             return this;
         }
 
-        public UI_WindowConfig Build()
-        {
-            return currConfig;
-        }
+        public UI_WindowConfig Build() => currConfig;
     }
 }

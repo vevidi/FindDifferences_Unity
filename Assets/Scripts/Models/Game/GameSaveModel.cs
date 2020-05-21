@@ -35,19 +35,10 @@ namespace Vevidi.FindDiff.GameModel
             this.selectedLevel = selectedLevel;
         }
 
-        public LevelDescriptionModel GetLevel(int id)
-        {
-            return levels.Find((l) => { return l.LevelInfo.Id == id; });
-        }
+        public LevelDescriptionModel GetLevel(int id) => levels.Find((l) => { return l.LevelInfo.Id == id; });
 
-        public void Decode(string json)
-        {
-            JsonUtility.FromJsonOverwrite(json, this);
-        }
+        public void Decode(string json) => JsonUtility.FromJsonOverwrite(json, this);
 
-        public string Encode()
-        {
-            return JsonUtility.ToJson(this);
-        }
+        public string Encode() => JsonUtility.ToJson(this);
     }
 }

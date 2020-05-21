@@ -32,10 +32,6 @@ namespace Vevidi.FindDiff.Factories
             return checkmark;
         }
 
-        public MissTapCheckmark CreateMissTapCheckmark(RectTransform parent)
-        {
-            MissTapCheckmark checkmark = CreateItem(missTapMarkPrefab,parent);
-            return checkmark;
-        }
+        public MissTapCheckmark CreateMissTapCheckmark(RectTransform parent) => CreateItem(missTapMarkPrefab, parent);
     }
 }

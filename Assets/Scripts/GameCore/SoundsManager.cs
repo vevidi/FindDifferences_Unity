@@ -82,10 +82,7 @@ namespace Vevidi.FindDiff.GameLogic
             }
         }
 
-        public void StopSoundOneShot()
-        {
-            sourceOneShot.Stop();
-        }
+        public void StopSoundOneShot() => sourceOneShot.Stop();
 
         public void StopBackgroundSound()
         {

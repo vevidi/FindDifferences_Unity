@@ -33,15 +33,9 @@ namespace Vevidi.FindDiff.GameUtils
             public static Vector2 CenterBottom = new Vector2(0.5f, 0);
         }
 
-        public static Sprite GetSpriteFromTex2D(Texture2D texture)
-        {
-            return GetSpriteFromTex2D(texture, SpritePivot.Center);
-        }
+        public static Sprite GetSpriteFromTex2D(Texture2D texture) => GetSpriteFromTex2D(texture, SpritePivot.Center);
 
-        public static Sprite GetSpriteFromTex2D(Texture2D texture, Rect rect)
-        {
-            return Sprite.Create(texture, rect, SpritePivot.Center);
-        }
+        public static Sprite GetSpriteFromTex2D(Texture2D texture, Rect rect) => Sprite.Create(texture, rect, SpritePivot.Center);
 
         public static Sprite GetSpriteFromTex2D(Texture2D texture, Vector2 pivot)
         {
@@ -62,17 +56,12 @@ namespace Vevidi.FindDiff.GameUtils
                 return ts.ToString(@"mm\:ss");            
         }
 
-        public static float GetAspectRatio()
-        {
-            return (float)Screen.width / Screen.height;
-        }
+        public static float GetAspectRatio() => (float)Screen.width / Screen.height;
 
         public static void PrintDictionary<T1, T2>(Dictionary<T1, T2> dictionary)
         {
             foreach (KeyValuePair<T1, T2> kvp in dictionary)
-            {
                 DebugLog("Dict: " + string.Format("Key = {0}, Value = {1}", kvp.Key, kvp.Value));
-            }
         }
 
         public static void ClearLog()
@@ -100,10 +89,7 @@ namespace Vevidi.FindDiff.GameUtils
 #endif
         }
 
-        public static bool IsMobile()
-        {
-            return Application.isMobilePlatform;
-        }
+        public static bool IsMobile() => Application.isMobilePlatform;
 
         public static string GetHash(string str)
         {

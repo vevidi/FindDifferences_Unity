@@ -26,8 +26,8 @@ namespace Vevidi.FindDiff.UI
         private float moveSpeed = 60f;
         [SerializeField]
         private float rotationSpeed = 270f;
-        [SerializeField]
-        private float distToCenterTreshold = 0.3f;
+        //[SerializeField]
+        //private float distToCenterTreshold = 0.3f;
         [SerializeField]
         private List<Transform> items;
 #pragma warning restore 0649
@@ -286,7 +286,6 @@ namespace Vevidi.FindDiff.UI
         public void SwipeLeftInternal(Transform firstObj, Transform secondObj)
         {
             Utils.DebugLog("Swipe left internal! " + (currItem < items.Count - 1) + " " + !isBlocked);
-
             isBlocked = true;
             BlockItems(isBlocked);
             preAnimationNeeded = true;
@@ -296,30 +295,12 @@ namespace Vevidi.FindDiff.UI
             StartCoroutine(RotateTo(secondObj, leftRotation));
         }
 
-        public void ResetCurrentMoveValue()
-        {
-            currMoveValue = 0.5f;
-        }
+        public void ResetCurrentMoveValue() => currMoveValue = 0.5f;
 
         private void LerpPositionRotation(Transform objTrans, Vector3 startPos, Vector3 endPos, Quaternion startRot, Quaternion endRot, float value, float t = -1)
         {
             if (currMoveValue > 0)
             {
-                //if (t >= 0)
-                //{
-                //    if (!flag && t < 0.5f)
-                //    {
-                //        flag = true;
-                //        Utils.DebugLog("CHANGED: " + " " + !flag + " " + flag);
-                //    }
-                //    else if (flag && t > 0.5f)
-                //    {
-                //        flag = false;
-                //        Utils.DebugLog("CHANGED: " + " " + !flag + " " + flag);
-                //    }
-                //}
-
-                //Utils.DebugLog("LPR -> " + objTrans.gameObject.name + " " + value + " " + t);
                 objTrans.localPosition = Vector3.Lerp(startPos, endPos, value * 2f);
                 objTrans.localRotation = Quaternion.Lerp(startRot, endRot, value * 2f);
             }
@@ -353,8 +334,6 @@ namespace Vevidi.FindDiff.UI
 
         private void CenterReached()
         {
-            //Utils.ClearLog();
-            //Debug.LogWarning("->>>>>>>>>>> CENTER REACHED!");
             int rightItem = currItem + 1;
             int leftItem = currItem - 1;
             if (rightItem <= items.Count - 1)
@@ -370,7 +349,7 @@ namespace Vevidi.FindDiff.UI
             ArrangeItems(currItem);
         }
 
-        private (int curr, int toCenter/*, float dist*/) GetCenterItemID()
+        private (int curr, int toCenter) GetCenterItemID()
         {
             int resultCurr = -1;
             int resultToCenter = -1;
@@ -381,7 +360,6 @@ namespace Vevidi.FindDiff.UI
                 if (i < 0 || i > items.Count - 1)
                     continue;
                 var item = itemsScripts[i];
-                //float dist = Mathf.Abs(item.transform.localPosition.x - centerPos.x);
                 float dist = Mathf.Abs(item.transform.localPosition.x); // center x position == 0
                 if (dist < 1f)
                 {
@@ -405,8 +383,6 @@ namespace Vevidi.FindDiff.UI
 
         public void MoveLeftPercent(float value) // value in [0,1] range
         {
-            Utils.DebugLog(value);
-
             if (currItem < items.Count - 1)
             {
                 currMoveValue += value;
@@ -419,7 +395,6 @@ namespace Vevidi.FindDiff.UI
                     LerpPositionRotation(items[currItem], centerPos, rightStartPos, centerRotation, rightRotation, currMoveValue - 0.5f);
                 else if (currMoveValue < 0.5f)
                     LerpPositionRotation(items[currItem], leftStartPos, centerPos, leftRotation, centerRotation, currMoveValue);
-
                 if (currMoveValue < 0.5f)
                     LerpPositionRotation(items[nextItem], centerPos, rightStartPos, centerRotation, rightRotation, currMoveValue, currMoveValue);
                 else if (currMoveValue - 0.5f > 0)
@@ -438,7 +413,6 @@ namespace Vevidi.FindDiff.UI
                     }
                     else if (currItem == currCenterItemId)
                     {
-                        Debug.LogWarning("PPPPPPP");
                         if (items[currCenterItemId].localPosition.x > 0f && nextItem != currItem - 1)
                         {
                             nextItem = currItem - 1;

@@ -28,10 +28,7 @@ namespace Vevidi.FindDiff.GameModel
         }
 
         public LevelDescriptionModel(LevelInfoModel levelInfo, Texture2D image, bool isOpened = false, bool isEnded = false)
-            :this(levelInfo,isOpened,isEnded)
-        {
-            levelImage = image;
-        }
+            :this(levelInfo,isOpened,isEnded) => levelImage = image;
 
         public int Id { get => levelInfo.Id;}
         public List<DifferenceInfoModel> Differences { get => levelInfo.Differences; }
@@ -40,10 +37,7 @@ namespace Vevidi.FindDiff.GameModel
         public Texture2D LevelImage { get => levelImage; }
         public LevelInfoModel LevelInfo { get => levelInfo; }
 
-        public void LoadImage()
-        {
-            levelImage = SaveLoadUtility.LoadImage(levelInfo.Id + ".jpg");
-        }
+        public void LoadImage() => levelImage = SaveLoadUtility.LoadImage(levelInfo.Id + ".jpg");
 
         public override string ToString()
         {

@@ -35,10 +35,7 @@ namespace Vevidi.FindDiff.UI
             }
         }
 
-        private void Start()
-        {
-            StartLoad();
-        }
+        private void Start() => StartLoad();
                
         private void LoadingStatusChange(LoadingStatusCommand command)
         {
@@ -52,15 +49,9 @@ namespace Vevidi.FindDiff.UI
             }
         }
 
-        private void TryLoadAgain(StartLoadAgainCommand command)
-        {
-            StartLoad();
-        }
+        private void TryLoadAgain(StartLoadAgainCommand command) => StartLoad();
 
-        private void StartDataLoad()
-        {
-            GameDataDownloader.LoadGameData(OnLoadComplete, OnLoadError);
-        }
+        private void StartDataLoad() => GameDataDownloader.LoadGameData(OnLoadComplete, OnLoadError);
 
         private void OnLoadComplete(LevelsModel model)
         {

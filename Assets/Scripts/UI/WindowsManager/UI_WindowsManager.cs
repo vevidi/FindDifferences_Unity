@@ -24,11 +24,14 @@ namespace Vevidi.FindDiff.UI
 
         public static UI_WindowsManager Instance { get; private set; }
 
+#pragma warning disable 0649
+        [SerializeField]
+        private List<WindowDescription> windows;
+#pragma warning restore 0649
+
         private Transform popupsRoot;
         private Dictionary<eWindowType, GameObject> openedWindows;
         private Stack<eWindowType> windowsStack;
-
-        public List<WindowDescription> windows;
 
         private void Awake()
         {

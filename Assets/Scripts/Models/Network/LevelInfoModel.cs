@@ -20,6 +20,23 @@ namespace Vevidi.FindDiff.NetworkModel
         public int Id { get => id; set => id = value; }
         public string Image { get => img; set => img = value; }
 
+        private LevelInfoModel()
+        {
+            differences = new List<DifferenceInfoModel>();
+        }
+
+        public LevelInfoModel(int id) : this()
+        {
+            this.id = id;
+            img = "";
+        }
+
+        public LevelInfoModel(int id, string img):this(id)
+        {
+            this.id = id;
+            this.img = img;
+        }
+
         public override string ToString()
         {
             string result = "";

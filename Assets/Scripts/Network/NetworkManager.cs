@@ -23,10 +23,7 @@ namespace Vevidi.FindDiff.Network
                 Init();
                 return instance;
             }
-            private set
-            {
-                instance = value;
-            }
+            private set => instance = value;
         }
 
         protected static void Init()

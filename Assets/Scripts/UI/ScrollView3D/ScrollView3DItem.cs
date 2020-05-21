@@ -8,8 +8,6 @@ namespace Vevidi.FindDiff.UI
     public class ScrollView3DItem : MonoBehaviour
     {
 #pragma warning disable 0649
-        //[SerializeField]
-        //private GameObject blurredImage;
         [SerializeField]
         private GameObject levelPassedCheckmark;
         [SerializeField]
@@ -54,14 +52,6 @@ namespace Vevidi.FindDiff.UI
             buttonImageTexture.ReadPixels(new Rect(0, 0, width / 2, height), 0, 0);
             buttonImageTexture.Apply(false);
 
-            //thisRenderer.sharedMaterial = new Material(thisRenderer.sharedMaterial)
-            //{
-            //    mainTexture = buttonImageTexture
-            //};
-            //imageWithGradient.sharedMaterial = new Material(imageWithGradient.sharedMaterial)
-            //{
-            //    mainTexture = buttonImageTexture
-            //};
             thisMaterial.mainTexture = buttonImageTexture;
             thisGradientMaterial.mainTexture = buttonImageTexture;
 
@@ -71,9 +61,7 @@ namespace Vevidi.FindDiff.UI
                 levelPassedGradient.SetActive(true);
             }
             else if (!levelDescription.IsOpened)
-            {
                 MakeGrayscale();
-            }
         }
 
         public void MakeGrayscale()
@@ -94,9 +82,6 @@ namespace Vevidi.FindDiff.UI
             }
         }
 
-        public void BlockItem(bool isBlocked)
-        {
-            this.isBlocked = isBlocked;
-        }
+        public void BlockItem(bool isBlocked) => this.isBlocked = isBlocked;
     }
 }

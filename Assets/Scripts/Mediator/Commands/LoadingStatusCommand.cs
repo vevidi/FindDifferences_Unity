@@ -1,6 +1,6 @@
 ﻿namespace Vevidi.FindDiff.GameMediator.Commands
 {
-    public class LoadingStatusCommand : ICommand
+    public class LoadingStatusCommand : Command
     {
         public enum eLoadingStatus
         {

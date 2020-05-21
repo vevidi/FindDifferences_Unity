@@ -51,10 +51,7 @@ namespace Vevidi.FindDiff.UI
             }
         }
 
-        private void OnDestroy()
-        {
-            levelButton.onClick.RemoveListener(OnClick);
-        }
+        private void OnDestroy() => levelButton.onClick.RemoveListener(OnClick);
 
         private void OnClick()
         {

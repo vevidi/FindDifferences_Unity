@@ -14,10 +14,7 @@ namespace Vevidi.FindDiff.UI
 
         private GameManager gManager;
 
-        private void Awake()
-        {
-            gManager = GameManager.Instance;
-        }
+        private void Awake() => gManager = GameManager.Instance;
 
         private void Start()
         {
@@ -25,11 +22,10 @@ namespace Vevidi.FindDiff.UI
             List<Transform> listItems = new List<Transform>();
             foreach (LevelDescriptionModel level in allLevels)
             {
-                ScrollView3DItem button = GameManager.Instance.UiFactory.CreateLevelButton3D(level);
+                ScrollView3DItem button = gManager.UiFactory.CreateLevelButton3D(level);
                 listItems.Add(button.transform);
             }
-            levelListView.Initialize(listItems, GameManager.Instance.LevelsManager.GetSelectedLevel());
+            levelListView.Initialize(listItems, gManager.LevelsManager.GetSelectedLevel());
         }
-
     }
 }

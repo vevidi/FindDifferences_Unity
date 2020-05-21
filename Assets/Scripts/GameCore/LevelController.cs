@@ -44,6 +44,8 @@ namespace Vevidi.FindDiff.GameLogic
             {
                 gameFieldImageTransform.localScale = Vector3.one * 0.85f;
                 gameFieldRoot.localScale = Vector3.one * 0.85f;
+
+                
             }
         }
 
@@ -184,15 +186,9 @@ namespace Vevidi.FindDiff.GameLogic
                 ta.PlayHintAnimation();
         }
 
-        private void Start()
-        {
-            InitLevel();
-        }
+        private void Start() => InitLevel();
 
-        public LevelDescriptionModel GetLevelInfo()
-        {
-            return levelInfo;
-        }
+        public LevelDescriptionModel GetLevelInfo() => levelInfo;
 
         protected override void OnDestroy()
         {

@@ -14,9 +14,6 @@ namespace Vevidi.FindDiff.GameLogic
             checkmarkAnimator.SetTrigger(GameVariables.MissAnimStart);
         }
 
-        public void OnAnimationEnded()
-        {
-            Destroy(gameObject);
-        }
+        public void OnAnimationEnded() => Destroy(gameObject);
     }
 }

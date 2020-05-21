@@ -12,10 +12,7 @@ namespace Vevidi.FindDiff.GameLogic
         public GameSaveModel GameSave { get; set; }
         public int SaveVersion { get { return GameSave.Version; } }
 
-        public SaveManager()
-        {
-            GameSave = new GameSaveModel();
-        }
+        public SaveManager() => GameSave = new GameSaveModel();
 
         public void SaveGame(List<LevelDescriptionModel> allLevels, int version = -1, int selectedLevel = 0)
         {

@@ -12,10 +12,7 @@ namespace Vevidi.FindDiff.GameUtils
             return listToClone.Select(item => (T)item.Clone()).ToList();
         }
 
-        public static bool IsMore(this Vector3 item1, Vector3 item2)
-        {
-            return (item1.magnitude > item2.magnitude);
-        }
+        public static bool IsMore(this Vector3 item1, Vector3 item2) => (item1.magnitude > item2.magnitude);
 
         public static Texture2D ToTexture2D(this RenderTexture rTex)
         {

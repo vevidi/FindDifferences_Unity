@@ -8,9 +8,6 @@ namespace Vevidi.FindDiff.GameLogic
     {
         public Action<PointerEventData> OnBackgroundClick = delegate { };
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            OnBackgroundClick?.Invoke(eventData);
-        }
+        public void OnPointerDown(PointerEventData eventData) => OnBackgroundClick?.Invoke(eventData);
     }
 }

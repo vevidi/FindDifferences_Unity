@@ -3,7 +3,7 @@ using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameMediator.Commands
 {
-    public class DiffFoundCommand : ICommand
+    public class DiffFoundCommand : Command
     {
         public TouchableArea Sender { get; private set; }
         public DifferenceInfoModel FoundedDifference { get; private set; }

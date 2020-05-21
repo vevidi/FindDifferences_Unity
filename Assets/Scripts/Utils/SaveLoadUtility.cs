@@ -5,6 +5,17 @@ namespace Vevidi.FindDiff.GameUtils
 {
     public static class SaveLoadUtility
     {
+        public static string LoadTextFile( string path )
+        {
+            string result = File.ReadAllText(path);
+            return result;
+        }
+
+        public static void SaveTextFile(string path, string data)
+        {
+            File.WriteAllText(path, data);
+        }
+
         public static Texture2D LoadImage(string imageName, string imageFolder = "LoadedImages")
         {
             string path = Application.persistentDataPath + "/" + imageFolder + "/" + imageName;

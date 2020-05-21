@@ -8,15 +8,9 @@ using Vevidi.FindDiff.NetworkModel;
 
 namespace Vevidi.FindDiff.GameLogic
 {
-    public class TouchableArea : MonoBehaviour, /*ICanvasRaycastFilter,*/ IPointerClickHandler
+    public class TouchableArea : DebugableArea, IPointerClickHandler
     {
-#pragma warning disable 0649
-        [SerializeField]
-        private RectTransform debugPoint;
-#pragma warning restore 0649
-
         private DifferenceInfoModel model;
-        private RectTransform thisTransform;
         private ClickableBackground parentClickArea;
         private ParticleSystem wavesParticles;
         private float radius = 50f;
@@ -30,20 +24,13 @@ namespace Vevidi.FindDiff.GameLogic
             thisTransform.localScale = Vector3.one;
         }
 
-        public void SetClickableArea(ClickableBackground area)
-        {
-            parentClickArea = area;
-            Utils.DebugLog(parentClickArea.gameObject.name, eLogType.Warning);
-        }
+        public void SetClickableArea(ClickableBackground area) => parentClickArea = area;
 
-        public int GetId()
-        {
-            return model.Id;
-        }
+        public int GetId() => model.Id;
 
-        private void Awake()
+        protected override void Awake()
         {
-            thisTransform = GetComponent<RectTransform>();
+            base.Awake();
             wavesParticles = GetComponentInChildren<ParticleSystem>();
         }
 
@@ -52,7 +39,7 @@ namespace Vevidi.FindDiff.GameLogic
         private void Start()
         {
             GetComponent<Image>().color = new Color32(255, 255, 255, 128);
-            CreateDebugPoints();
+            CreateDebugPoints(model.Radius);
         }
 #endif
 
@@ -87,27 +74,5 @@ namespace Vevidi.FindDiff.GameLogic
             else
                 parentClickArea.OnPointerDown(eventData);
         }
-
-        // ------------ DEBUG functionality -----------
-        private void CreateDebugPoints()
-        {
-            float delta = 2 * Mathf.PI / 50;
-            for (int i = 0; i < 50; ++i)
-            {
-                float x = radius * Mathf.Cos(delta * i);
-                float y = radius * Mathf.Sin(delta * i);
-                RectTransform rTrans = Instantiate(debugPoint, thisTransform);
-                rTrans.localPosition = new Vector3(x, y, 0);
-            }
-        }
-
-        private void CreateDebugClickPoint(Vector2 clickPosition)
-        {
-            var spT = Instantiate(debugPoint, thisTransform);
-            spT.localPosition = clickPosition;
-            spT.GetComponent<Image>().color = Color.green;
-            spT.sizeDelta = new Vector2(5, 5);
-        }
-        // --------------------------------------------
     }
 }

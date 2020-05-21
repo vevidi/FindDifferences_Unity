@@ -12,10 +12,7 @@ namespace Vevidi.FindDiff.GameLogic
         private List<LevelDescriptionModel> allLevels;
         private int selectedLevel = 0;
 
-        public LevelsManager()
-        {
-            allLevels = new List<LevelDescriptionModel>();
-        }
+        public LevelsManager() => allLevels = new List<LevelDescriptionModel>();
 
         public void InitFromLevelsModel(LevelsModel model)
         {
@@ -58,15 +55,9 @@ namespace Vevidi.FindDiff.GameLogic
             Utils.DebugLog("->>>> InitFromLevelsSave");
         }
 
-        public List<LevelDescriptionModel> GetAllLevels()
-        {
-            return allLevels;
-        }
+        public List<LevelDescriptionModel> GetAllLevels() => allLevels;
 
-        private void OnSelectLevel(NextLevelCommand command)
-        {
-            SelectLevel(command.LevelID);
-        }
+        private void OnSelectLevel(NextLevelCommand command) => SelectLevel(command.LevelID);
 
         public void SelectLevel(int id)
         {
@@ -92,9 +83,6 @@ namespace Vevidi.FindDiff.GameLogic
             GameManager.Instance.SaveManager.SaveGame(allLevels, -1, levelID + 1);
         }
 
-        public LevelDescriptionModel GetLevelByID(int id)
-        {
-            return allLevels.Find((l) => l.Id == id);
-        }
+        public LevelDescriptionModel GetLevelByID(int id) => allLevels.Find((l) => l.Id == id);
     }
 }

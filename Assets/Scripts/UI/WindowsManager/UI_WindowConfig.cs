@@ -16,10 +16,7 @@ namespace Vevidi.FindDiff.UI
         public Dictionary<string, object> WData { get { return wData; } }
         public Dictionary<string, Action> CData { get { return cData; } }
 
-        public UI_WindowConfig(eWindowType WType)
-        {
-            this.wType = WType;
-        }
+        public UI_WindowConfig(eWindowType WType) => this.wType = WType;
 
         public void AddWindowData(string key, object value)
         {

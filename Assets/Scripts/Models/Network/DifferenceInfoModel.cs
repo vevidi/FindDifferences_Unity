@@ -25,17 +25,11 @@ namespace Vevidi.FindDiff.NetworkModel
 
         public float X { get => x; }
         public float Y { get => y; }
-        public float Radius { get => r; }
-        public int Id { get => id; }
+        public float Radius { get => r; set => r = value; }
+        public int Id { get => id; set => id = value; }
 
-        public object Clone()
-        {
-            return this.MemberwiseClone();
-        }
-
-        public override string ToString()
-        {
-            return "ID:" + id + " X: " + x + " Y: " + y + " R: " + r;
-        }
+        public object Clone() => MemberwiseClone();
+ 
+        public override string ToString() => "ID:" + id + " X: " + x + " Y: " + y + " R: " + r;
     }
 }

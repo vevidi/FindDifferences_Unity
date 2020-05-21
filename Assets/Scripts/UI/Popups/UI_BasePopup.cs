@@ -16,15 +16,9 @@ namespace Vevidi.FindDiff.UI
 
         public bool IsBackBtnClosable { get { return isBackBtnClosable; } }
 
-        protected virtual void Awake()
-        {
-            gameEvents = GameManager.Instance.gameEventSystem;
-        }
+        protected virtual void Awake() => gameEvents = GameManager.Instance.gameEventSystem;
 
-        public virtual void Init(UI_WindowConfig cfg)
-        {
-            WType = cfg.WType;
-        }
+        public virtual void Init(UI_WindowConfig cfg) => WType = cfg.WType;
 
         public virtual void OnCloseButtonClick()
         {
@@ -32,9 +26,6 @@ namespace Vevidi.FindDiff.UI
             UI_WindowsManager.Instance.HideWindow(WType);
         }
 
-        public virtual void OnOKButtonClick()
-        {
-            SoundsManager.Instance.PlaySound(eSoundType.Click);
-        }
+        public virtual void OnOKButtonClick() => SoundsManager.Instance.PlaySound(eSoundType.Click);
     }
 }

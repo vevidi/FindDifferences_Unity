@@ -14,32 +14,16 @@ namespace Vevidi.FindDiff.NetworkModel
         private int version;
 #pragma warning restore 0649
 
-        public LevelsModel()
-        {
-            levels = new List<LevelInfoModel>();
-        }
-
-        public LevelsModel( string json) : this()
-        {
-            Decode(json);
-        }
+        public LevelsModel() => levels = new List<LevelInfoModel>();
+        public LevelsModel( string json) : this() => Decode(json);
 
         public List<LevelInfoModel> Levels { get => levels; set => levels = value; }
-        public int Version { get => version; }
+        public int Version { get => version; set => version = value; }
 
-        public void Decode(string json)
-        {
-            JsonUtility.FromJsonOverwrite(json, this);
-        }
+        public void Decode(string json) => JsonUtility.FromJsonOverwrite(json, this);
 
-        public string Encode()
-        {
-            return JsonUtility.ToJson(this);
-        }
+        public string Encode() => JsonUtility.ToJson(this,true);
 
-        public override string ToString()
-        {
-            return String.Join("\n",levels);
-        }
+        public override string ToString() => string.Join("\n", levels);
     }
 }

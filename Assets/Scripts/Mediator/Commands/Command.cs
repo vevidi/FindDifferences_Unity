@@ -1,6 +1,6 @@
 ﻿namespace Vevidi.FindDiff.GameMediator.Commands
 {
-    public interface ICommand
+    public abstract class Command
     {
         //void Exec();
     }

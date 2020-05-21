@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class OpenScenes
 {
-    private const string SC_PREFIX = "Assets/Scenes/";
+    private const string SC_PREFIX = "Assets/Scenes/Game/";
     private const string SC_SUFFIX = ".unity";
 
     [MenuItem("Custom/Run&Stop from preloader")]
