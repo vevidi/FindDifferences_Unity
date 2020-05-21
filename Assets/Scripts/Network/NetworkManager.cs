@@ -104,6 +104,7 @@ namespace Vevidi.FindDiff.Network
 
         public async Task<bool> CheckInternetConnection(Action callback)
         {
+#if !UNITY_WEBGL
             bool result = false;
             try
             {
@@ -118,6 +119,10 @@ namespace Vevidi.FindDiff.Network
                 Debug.LogException(e);
             }
             return result;
+#else
+            callback?.Invoke();
+            return true;
+#endif
         }
     }
 }
